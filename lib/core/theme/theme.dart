@@ -30,7 +30,7 @@ class ThemeClass {
       bodyMedium: GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: MyColors.shadow,
+        color: MyColors.secondary,
       ),
       bodySmall: GoogleFonts.poppins(
         fontSize: 8,
@@ -55,6 +55,24 @@ class ThemeClass {
         borderSide: const BorderSide(
           color: MyColors.primary,
           width: 2,
+        ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: const WidgetStatePropertyAll(
+          Color(0xFFDADBDC),
+        ),
+        minimumSize: const WidgetStatePropertyAll(
+          Size(double.infinity, 55),
+        ),
+        foregroundColor: const WidgetStatePropertyAll(
+          MyColors.secondary,
+        ),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
         ),
       ),
     ),

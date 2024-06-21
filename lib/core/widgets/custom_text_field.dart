@@ -6,12 +6,14 @@ import 'package:flutter/widgets.dart';
 class CustomTextField extends StatelessWidget {
   final ImageProvider image;
   final String text;
-  const CustomTextField({super.key, required this.image, required this.text});
+  final TextEditingController controller;
+  const CustomTextField({super.key, required this.image, required this.text, required this.controller,});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       style: Theme.of(context).textTheme.bodyLarge,
+      controller: controller,
       decoration: InputDecoration(
         hintText: text,
         prefixIcon: Padding(
@@ -25,6 +27,5 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }
