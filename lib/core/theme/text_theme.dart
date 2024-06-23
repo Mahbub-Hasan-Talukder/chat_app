@@ -21,7 +21,7 @@ class MyTextTheme {
     ),
     bodyMedium: GoogleFonts.poppins(
       fontSize: 12,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w300,
       color: MyColors.secondary,
     ),
     bodySmall: GoogleFonts.poppins(

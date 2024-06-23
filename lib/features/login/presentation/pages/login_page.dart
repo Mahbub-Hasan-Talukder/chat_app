@@ -4,51 +4,37 @@ import 'package:chat_app/core/validator/email_validator.dart';
 import 'package:chat_app/core/validator/password_validation.dart';
 import 'package:chat_app/core/widgets/custom_password_field.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
-import 'package:chat_app/features/sign_up/presentation/riverpod/sign_up_controller.dart';
-import 'package:chat_app/features/sign_up/presentation/widgets/user_data.dart';
+import 'package:chat_app/features/login/presentation/riverpod/login_controller.dart';
+import 'package:chat_app/features/login/presentation/widgets/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class SignUpPage extends ConsumerStatefulWidget {
-  const SignUpPage({super.key});
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginPageState();
 }
 
-class _SignUpState extends ConsumerState<SignUpPage> {
-  TextEditingController nameCtr = TextEditingController();
+class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController emailCtr = TextEditingController();
   TextEditingController passCtr = TextEditingController();
-  TextEditingController confirmPassCtr = TextEditingController();
-  String? emailFieldError, conPassdFieldError, passdFieldError;
+  String? emailFieldError, passFieldError;
+  bool enableCheckbox = false;
 
-  ({
-    bool isNameEnable,
-    bool isEmailEnable,
-    bool isPassEnable,
-    bool isConfirmPass,
-  }) buttonNotifier = (
-    isNameEnable: false,
+  ({bool isEmailEnable, bool isPassEnable}) buttonNotifier = (
     isEmailEnable: false,
     isPassEnable: false,
-    isConfirmPass: false,
   );
 
   @override
   void initState() {
     super.initState();
-    nameCtr.addListener(() {
-      _enableButtonState();
-    });
     emailCtr.addListener(() {
       _enableButtonState();
     });
     passCtr.addListener(() {
-      _enableButtonState();
-    });
-    confirmPassCtr.addListener(() {
       _enableButtonState();
     });
   }
@@ -56,22 +42,20 @@ class _SignUpState extends ConsumerState<SignUpPage> {
   void _enableButtonState() {
     setState(() {
       buttonNotifier = (
-        isNameEnable: nameCtr.text.isNotEmpty,
         isEmailEnable: emailCtr.text.isNotEmpty,
         isPassEnable: passCtr.text.isNotEmpty,
-        isConfirmPass: confirmPassCtr.text.isNotEmpty,
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(signUpControllerProvider);
-    ref.listen(signUpControllerProvider, (_, next) {
+    final state = ref.watch(loginControllerProvider);
+    ref.listen(loginControllerProvider, (_, next) {
       if (next.value?.$1 == null && next.value?.$2 == null) {
         const CircularProgressIndicator();
       } else if (next.value?.$1 != null && next.value?.$2 == null) {
-        context.push(MyRoutes.login);
+        // context.push(MyRoutes.login);
       } else if (next.value?.$1 == null && next.value?.$2 != null) {
         showDialog(
           context: context,
@@ -93,59 +77,124 @@ class _SignUpState extends ConsumerState<SignUpPage> {
       }
     });
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(left: 25, right: 25),
+            padding: const EdgeInsets.only(
+              left: 30,
+              right: 30,
+            ),
             child: Column(
               children: [
                 const SizedBox(height: 80),
                 Center(
                   child: Column(
                     children: [
-                      Text(
-                        'Create an account',
-                        style: Theme.of(context).textTheme.headlineLarge,
+                      RichText(
+                        text: TextSpan(
+                          text: 'Hi, Welcome to ',
+                          style: Theme.of(context).textTheme.headlineLarge,
+                          children: [
+                            TextSpan(
+                              text: 'Barta!',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 15),
-                      const Text('Connect with your friend today!'),
+                      Text(
+                        'Enter your credential to login',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 90),
+                const SizedBox(height: 45),
                 CustomTextField(
-                  controller: nameCtr,
-                  image: Assets.images.user.provider(),
-                  text: 'User name',
-                ),
-                const SizedBox(height: 15),
-                CustomTextField(
-                  controller: emailCtr,
                   image: Assets.images.mail.provider(),
-                  text: 'email',
+                  text: 'Enter your email',
+                  controller: emailCtr,
                   fieldError: emailFieldError,
                 ),
                 const SizedBox(height: 15),
                 CustomPassField(
-                  controller: passCtr,
                   prefixIcon: Assets.images.padlock.provider(),
-                  hintText: 'password',
-                  fieldError: passdFieldError,
+                  hintText: 'Enter your password',
+                  controller: passCtr,
+                  fieldError: passFieldError,
                 ),
                 const SizedBox(height: 15),
-                CustomPassField(
-                  controller: confirmPassCtr,
-                  prefixIcon: Assets.images.padlock.provider(),
-                  hintText: 'Confirm password',
-                  fieldError: conPassdFieldError,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                      width: 10,
+                      child: Checkbox(
+                        value: enableCheckbox,
+                        onChanged: (newValue) {
+                          setState(() {
+                            enableCheckbox = newValue!;
+                          });
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        fillColor: (enableCheckbox)
+                            ? WidgetStatePropertyAll(
+                                Theme.of(context).colorScheme.primary,
+                              )
+                            : WidgetStatePropertyAll(
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.5),
+                              ),
+                        side: (enableCheckbox)
+                            ? BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.1),
+                                width: 2,
+                              )
+                            : BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 2,
+                              ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          enableCheckbox = !enableCheckbox;
+                        });
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          children: [
+                            TextSpan(
+                              text: 'Remember me',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 45),
                 ElevatedButton(
-                  style: (buttonNotifier.isNameEnable &
-                          buttonNotifier.isEmailEnable &
-                          buttonNotifier.isPassEnable &
-                          buttonNotifier.isConfirmPass)
+                  style: (buttonNotifier.isEmailEnable &
+                          buttonNotifier.isPassEnable)
                       ? ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.primary,
@@ -155,10 +204,8 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                           ),
                         )
                       : null,
-                  onPressed: (buttonNotifier.isNameEnable &
-                          buttonNotifier.isEmailEnable &
-                          buttonNotifier.isPassEnable &
-                          buttonNotifier.isConfirmPass)
+                  onPressed: (buttonNotifier.isEmailEnable &
+                          buttonNotifier.isPassEnable)
                       ? () {
                           final emailValidator = EmailValidation();
                           final passValidator = PasswordValidation();
@@ -166,26 +213,20 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                               emailValidator.validateEmail(emailCtr.text);
                           bool isPassValid =
                               passValidator.validatePassword(passCtr.text);
-                          bool doPassesMatch =
-                              passCtr.text == confirmPassCtr.text;
 
                           setState(() {
                             emailFieldError =
                                 (isEmailValid) ? null : 'Invalid email';
-                            passdFieldError = (isPassValid)
+                            passFieldError = (isPassValid)
                                 ? null
                                 : 'Password length must be greater than 5';
-                            conPassdFieldError = (doPassesMatch)
-                                ? null
-                                : 'passwaords must be same';
                           });
 
-                          if (isEmailValid && isPassValid && doPassesMatch) {
-                            ref.read(signUpControllerProvider.notifier).signUp(
+                          if (isEmailValid && isPassValid) {
+                            ref.read(loginControllerProvider.notifier).login(
                                   UserData(
-                                    name: nameCtr.text,
                                     email: emailCtr.text,
-                                    password: passCtr.text,
+                                    pass: passCtr.text,
                                   ),
                                 );
                           }
@@ -196,22 +237,22 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                           backgroundColor:
                               Theme.of(context).colorScheme.surface,
                         )
-                      : const Text('Sign Up'),
+                      : const Text('Login'),
                 ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
                     GestureDetector(
                       onTap: () {
-                        context.go(MyRoutes.login);
+                        context.go(MyRoutes.signUp);
                       },
                       child: RichText(
                         text: TextSpan(
-                          text: 'Already have an account? ',
+                          text: 'Don\'t have an account? ',
                           style: Theme.of(context).textTheme.bodyMedium,
                           children: [
                             TextSpan(
-                              text: 'Log in',
+                              text: 'Sign up',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -239,7 +280,7 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 90),
+                const SizedBox(height: 180),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
