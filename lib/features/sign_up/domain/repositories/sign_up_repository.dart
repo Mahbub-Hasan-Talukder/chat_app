@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:chat_app/features/sign_up/data/data_source/remote_data_source.dart';
 import 'package:chat_app/features/sign_up/data/repositories/sign_up_repository_imp.dart';
 import 'package:chat_app/features/sign_up/domain/entities/sign_up_entity.dart';

@@ -65,6 +65,7 @@ class _SignUpState extends ConsumerState<SignUp> {
   Widget build(BuildContext context) {
     final state = ref.watch(signUpControllerProvider);
     ref.listen(signUpControllerProvider, (_, next) {
+      print('${next.value?.$1} ${next.value?.$2}');
       if (next.value?.$1 != null && next.value?.$2 == null) {
         context.push(MyRoutes.login);
       } else if (next.value?.$1 == null && next.value?.$2 != null) {

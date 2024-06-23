@@ -15,25 +15,28 @@ class SignUpRepositoryImp implements SignUpRepository {
   FutureOr<(SignUpModel?, String?)> signUp({
     required UserData userData,
   }) async {
-    (SignUpModel?, String?) nmodel =
+    (SignUpModel?, String?) createdUser =
         await signUpRemoteDataSource.signUp(userData: userData);
-    if (nmodel.$1 != null) {
-      User user = nmodel.$1!.user;
-      // print('disp name: ${user.displayName} \n email: ${user.email} \n uid: ${user.uid}');
+
+    if (createdUser.$1 != null) {
+      User user = createdUser.$1!.user;
+      final db = FirebaseFirestore.instance;
+      FirebaseAuth auth = FirebaseAuth.instance;
+
       try {
-        final db = FirebaseFirestore.instance;
+        await user.updateProfile(displayName: userData.name);
+        await user.reload();
+        user = auth.currentUser!;
+
         final saveUserInfo = <String, String>{
-          'name': user.displayName ??
-              'No Name', // Provide a default value or handle the null case
-          'email': user.email ??
-              'No Email', // Provide a default value or handle the null case
+          'name': user.displayName ?? 'No Name',
+          'email': user.email ?? 'No Email',
         };
         await db.collection('users').doc(user.uid).set(saveUserInfo);
       } catch (e) {
-        print(e.toString());
         return (null, e.toString());
       }
     }
-    return nmodel;
+    return createdUser;
   }
 }

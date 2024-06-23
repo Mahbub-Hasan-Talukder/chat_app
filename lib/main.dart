@@ -1,9 +1,13 @@
+import 'package:chat_app/core/service/navigation/router_config/router_config.dart';
 import 'package:chat_app/core/theme/theme.dart';
-import 'package:chat_app/features/sign_up/presentation/pages/sign_up_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -11,11 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Chat App',
       theme: ThemeClass.theme,
-      home: SignUp(),
+      routerConfig: MyRouterConfig.router,
     );
   }
 }
