@@ -1,7 +1,4 @@
-import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class CustomTextField extends StatelessWidget {
   final ImageProvider image;

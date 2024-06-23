@@ -1,16 +1,21 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
+import 'package:chat_app/core/service/navigation/routes/routes.dart';
 import 'package:chat_app/core/widgets/custom_password_field.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
+import 'package:chat_app/features/sign_up/presentation/riverpod/sign_up_controller.dart';
+import 'package:chat_app/features/sign_up/presentation/widgets/user_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class SignUp extends StatefulWidget {
+class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends ConsumerState<SignUp> {
   TextEditingController nameCtr = TextEditingController();
   TextEditingController emailCtr = TextEditingController();
   TextEditingController passCtr = TextEditingController();
@@ -54,11 +59,34 @@ class _SignUpState extends State<SignUp> {
         isConfirmPass: confirmPassCtr.text.isNotEmpty,
       );
     });
-    print(buttonNotifier);
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(signUpControllerProvider);
+    ref.listen(signUpControllerProvider, (_, next) {
+      if (next.value?.$1 != null && next.value?.$2 == null) {
+        context.push(MyRoutes.login);
+      } else if (next.value?.$1 == null && next.value?.$2 != null) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error!'),
+              content: Text('${next.value?.$2}'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
@@ -119,7 +147,20 @@ class _SignUpState extends State<SignUp> {
                           ),
                         )
                       : null,
-                  onPressed: () {},
+                  onPressed: (buttonNotifier.isNameEnable &
+                          buttonNotifier.isEmailEnable &
+                          buttonNotifier.isPassEnable &
+                          buttonNotifier.isConfirmPass)
+                      ? () {
+                          ref.read(signUpControllerProvider.notifier).signUp(
+                                UserData(
+                                  name: nameCtr.text,
+                                  email: emailCtr.text,
+                                  password: passCtr.text,
+                                ),
+                              );
+                        }
+                      : null,
                   child: const Text('Sign Up'),
                 ),
                 const SizedBox(height: 10),
@@ -182,11 +223,9 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                TextButton(
+                ElevatedButton(
                   style: const ButtonStyle(
-                    side: WidgetStatePropertyAll<BorderSide>(
-                      BorderSide(color: Colors.orange, width: 2),
-                    ),
+                    elevation: WidgetStatePropertyAll(0),
                   ),
                   onPressed: () {},
                   child: Row(
