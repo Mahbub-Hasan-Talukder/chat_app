@@ -1,5 +1,7 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/validator/email_validator.dart';
+import 'package:chat_app/core/validator/password_validation.dart';
 import 'package:chat_app/core/widgets/custom_password_field.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
 import 'package:chat_app/features/sign_up/presentation/riverpod/sign_up_controller.dart';
@@ -20,6 +22,7 @@ class _SignUpState extends ConsumerState<SignUp> {
   TextEditingController emailCtr = TextEditingController();
   TextEditingController passCtr = TextEditingController();
   TextEditingController confirmPassCtr = TextEditingController();
+  String? emaildFieldError, conPassdFieldError, passdFieldError;
 
   ({
     bool isNameEnable,
@@ -65,8 +68,9 @@ class _SignUpState extends ConsumerState<SignUp> {
   Widget build(BuildContext context) {
     final state = ref.watch(signUpControllerProvider);
     ref.listen(signUpControllerProvider, (_, next) {
-      print('${next.value?.$1} ${next.value?.$2}');
-      if (next.value?.$1 != null && next.value?.$2 == null) {
+      if (next.value?.$1 == null && next.value?.$2 == null) {
+        const CircularProgressIndicator();
+      } else if (next.value?.$1 != null && next.value?.$2 == null) {
         context.push(MyRoutes.login);
       } else if (next.value?.$1 == null && next.value?.$2 != null) {
         showDialog(
@@ -120,18 +124,21 @@ class _SignUpState extends ConsumerState<SignUp> {
                   controller: emailCtr,
                   image: Assets.images.mail.provider(),
                   text: 'email',
+                  fieldError: emaildFieldError,
                 ),
                 const SizedBox(height: 15),
                 CustomPassField(
                   controller: passCtr,
                   prefixIcon: Assets.images.padlock.provider(),
                   hintText: 'password',
+                  fieldError: passdFieldError,
                 ),
                 const SizedBox(height: 15),
                 CustomPassField(
                   controller: confirmPassCtr,
                   prefixIcon: Assets.images.padlock.provider(),
                   hintText: 'Confirm password',
+                  fieldError: conPassdFieldError,
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
@@ -153,16 +160,43 @@ class _SignUpState extends ConsumerState<SignUp> {
                           buttonNotifier.isPassEnable &
                           buttonNotifier.isConfirmPass)
                       ? () {
-                          ref.read(signUpControllerProvider.notifier).signUp(
-                                UserData(
-                                  name: nameCtr.text,
-                                  email: emailCtr.text,
-                                  password: passCtr.text,
-                                ),
-                              );
+                          final emailValidator = EmailValidation();
+                          final passValidator = PasswordValidation();
+                          bool isEmailValid =
+                              emailValidator.validateEmail(emailCtr.text);
+                          bool isPassValid =
+                              passValidator.validatePassword(passCtr.text);
+                          bool doPassesMatch =
+                              passCtr.text == confirmPassCtr.text;
+
+                          setState(() {
+                            emaildFieldError =
+                                (isEmailValid) ? null : 'Invalid email';
+                            passdFieldError = (isPassValid)
+                                ? null
+                                : 'Password length must be greater than 5';
+                            conPassdFieldError = (doPassesMatch)
+                                ? null
+                                : 'passwaords must be same';
+                          });
+
+                          if (isEmailValid && isPassValid && doPassesMatch) {
+                            ref.read(signUpControllerProvider.notifier).signUp(
+                                  UserData(
+                                    name: nameCtr.text,
+                                    email: emailCtr.text,
+                                    password: passCtr.text,
+                                  ),
+                                );
+                          }
                         }
                       : null,
-                  child: const Text('Sign Up'),
+                  child: (state.isLoading)
+                      ? CircularProgressIndicator(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                        )
+                      : const Text('Sign Up'),
                 ),
                 const SizedBox(height: 10),
                 Row(

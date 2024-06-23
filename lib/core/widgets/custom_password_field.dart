@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 class CustomPassField extends StatefulWidget {
   final ImageProvider prefixIcon;
   final String hintText;
-  final bool? passTextFieldError;
+  final String? fieldError;
   final ValueChanged<String>? onChanged;
   final TextEditingController controller;
   const CustomPassField({
     super.key,
     required this.prefixIcon,
     required this.hintText,
-    this.passTextFieldError,
     this.onChanged,
     required this.controller,
+    this.fieldError,
   });
 
   @override
@@ -28,6 +28,10 @@ class _CustomPassFieldState extends State<CustomPassField> {
       obscureText: !isVisibilityOn,
       style: Theme.of(context).textTheme.bodyLarge,
       decoration: InputDecoration(
+        errorText: (widget.fieldError != null) ? widget.fieldError : null,
+        errorStyle: const TextStyle(
+          color: Color(0XFFE31609),
+        ),
         hintText: widget.hintText,
         prefixIcon: Padding(
           padding: const EdgeInsets.all(15.0),
