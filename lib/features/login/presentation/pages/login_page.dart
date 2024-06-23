@@ -55,7 +55,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (next.value?.$1 == null && next.value?.$2 == null) {
         const CircularProgressIndicator();
       } else if (next.value?.$1 != null && next.value?.$2 == null) {
-        // context.push(MyRoutes.login);
+        context.push(MyRoutes.landingPage);
       } else if (next.value?.$1 == null && next.value?.$2 != null) {
         showDialog(
           context: context,

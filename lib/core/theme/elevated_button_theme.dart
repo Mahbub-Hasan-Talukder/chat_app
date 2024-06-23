@@ -5,7 +5,7 @@ class MyElevatedfButtonTheme {
   static final myElevatedfButtonTheme = ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: const WidgetStatePropertyAll(
-        Color(0xFFDADBDC),
+        MyColors.surface,
       ),
       minimumSize: const WidgetStatePropertyAll(
         Size(double.infinity, 55),
