@@ -1,8 +1,11 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
+import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/widgets/custom_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 
 class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({super.key});
@@ -40,19 +43,33 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           child: Column(
             children: [
               const SizedBox(height: 80),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Assets.images.profile.image(
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Assets.images.profile.image(
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Theme.of(context).colorScheme.shadow,
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Assets.images.camera.image(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 15),
               Text(
@@ -102,8 +119,8 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                 onPressed: () async {
                   try {
                     await FirebaseAuth.instance.signOut();
-                    print('pressed');
-                  } catch (e) {
+                    context.go(MyRoutes.login);
+                  } on FirebaseAuthException catch (e) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -137,9 +154,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
           child: Column(
             children: [
-              Center(
-                child: Text('Home'),
-              )
+              SizedBox(height: 30),
             ],
           ),
         ),
