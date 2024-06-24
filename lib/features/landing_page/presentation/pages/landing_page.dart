@@ -1,3 +1,4 @@
+import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,8 @@ class LandingPage extends ConsumerStatefulWidget {
 }
 
 class _LandingPageState extends ConsumerState<LandingPage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  bool isDarkMode = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +39,56 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           padding: const EdgeInsets.all(35.0),
           child: Column(
             children: [
+              const SizedBox(height: 80),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Assets.images.profile.image(
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              Text(
+                '${auth.currentUser?.displayName}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              Text(
+                '${auth.currentUser?.email}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      children: [
+                        TextSpan(
+                          text: 'Light mode ',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Transform.scale(
+                    scale: 0.8,
+                    child: Switch(
+                      value: true,
+                      onChanged: (isOn) {},
+                    ),
+                  ),
+                ],
+              ),
               const Spacer(),
               ElevatedButton(
                 style: ButtonStyle(
@@ -70,7 +123,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                     );
                   }
                 },
-                child: const Text('Logout'),
+                child: Text('Logout'),
               ),
             ],
           ),
