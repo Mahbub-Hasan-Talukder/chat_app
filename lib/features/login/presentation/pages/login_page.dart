@@ -263,7 +263,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        context.push(MyRoutes.forgotPassword);
+                      },
                       child: RichText(
                         text: TextSpan(
                             text: 'Forgot ',
