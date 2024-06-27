@@ -1,11 +1,24 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PickImage {
   void showSnackBar({required BuildContext context, required String content}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(content)),
+    );
+  }
+
+  void popUpDialog({required BuildContext context, required String text}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error!'),
+          content: Text(text),
+        );
+      },
     );
   }
 
@@ -18,7 +31,7 @@ class PickImage {
         image = File(pickedImage.path);
       }
     } catch (e) {
-      showSnackBar(context: context, content: e.toString());
+      print(e.toString());
     }
     return image;
   }
