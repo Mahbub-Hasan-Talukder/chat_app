@@ -25,12 +25,17 @@ class _MyDrawerState extends State<MyDrawer> {
   User? user;
   String? imageUrl;
   FirebaseAuth auth = FirebaseAuth.instance;
-  String? photoLink = FirebaseAuth.instance.currentUser?.photoURL;
+  String? photoLink =
+      'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
 
   @override
   void initState() {
     super.initState();
     user = widget.auth.currentUser;
+    print('in init: ${auth.currentUser?.photoURL}');
+    photoLink = (auth.currentUser?.photoURL == null)
+        ? Assets.images.emptyPerson.path
+        : auth.currentUser?.photoURL;
   }
 
   @override
@@ -226,7 +231,7 @@ class _MyDrawerState extends State<MyDrawer> {
       print(user?.photoURL);
       return imageLink;
     } on FirebaseException catch (e) {
-      print('here ' + e.toString());
+      debugPrint('here ' + e.toString());
     }
   }
 }
