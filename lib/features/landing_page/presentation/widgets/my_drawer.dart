@@ -1,19 +1,18 @@
 import 'dart:io';
-
 import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
-import 'package:chat_app/core/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyDrawer extends StatefulWidget {
-  File? image;
   bool isActive;
   FirebaseAuth auth;
   MyDrawer({
     super.key,
-    required this.image,
     required this.isActive,
     required this.auth,
   });
@@ -23,6 +22,17 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  User? user;
+  String? imageUrl;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? photoLink = FirebaseAuth.instance.currentUser?.photoURL;
+
+  @override
+  void initState() {
+    super.initState();
+    user = widget.auth.currentUser;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -33,22 +43,20 @@ class _MyDrawerState extends State<MyDrawer> {
             const SizedBox(height: 80),
             Stack(
               children: [
-                (widget.image == null)
-                    ? CircleAvatar(
-                        backgroundImage: Assets.images.emptyPerson.provider(),
-                        radius: 50,
-                      )
-                    : Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        child: CircleAvatar(
-                          backgroundImage: FileImage(widget.image!),
-                          radius: 50,
-                        ),
-                      ),
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: CircleAvatar(
+                    backgroundImage: (photoLink == null)
+                        ? Assets.images.emptyPerson.provider()
+                        : NetworkImage(photoLink!),
+                    radius: 20,
+                  ),
+                ),
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -61,10 +69,14 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                     child: IconButton(
                       onPressed: () async {
-                        File? file = await PickImage().pickAnImage(context);
-                        setState(() {
-                          widget.image = file;
-                        });
+                        final imageUrl = await onProfileTapped();
+                        if (imageUrl != null) {
+                          setState(() {
+                            photoLink = imageUrl;
+                          });
+                        } else {
+                          print("image didn't load");
+                        }
                       },
                       icon: const Icon(Icons.add_a_photo_outlined),
                     ),
@@ -190,5 +202,31 @@ class _MyDrawerState extends State<MyDrawer> {
         ),
       ),
     );
+  }
+
+  Future<String?> onProfileTapped() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      print('Image not selected');
+      return null;
+    }
+
+    try {
+      String uniqFileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference referenceRoot = FirebaseStorage.instance.ref();
+      Reference referenceDirImages = referenceRoot.child((user?.uid)!);
+      Reference referenceImageToUpload =
+          referenceDirImages.child('images/$uniqFileName');
+      final uploadTask = await referenceImageToUpload.putFile(File(image.path));
+      final imageLink = await uploadTask.ref.getDownloadURL();
+      user?.updatePhotoURL(imageLink);
+      user?.reload;
+      user = auth.currentUser;
+      print(user?.photoURL);
+      return imageLink;
+    } on FirebaseException catch (e) {
+      print('here ' + e.toString());
+    }
   }
 }

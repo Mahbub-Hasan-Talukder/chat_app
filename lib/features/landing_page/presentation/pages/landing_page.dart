@@ -25,7 +25,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isDarkMode = false;
   late bool isActive;
-  File? image;
 
   @override
   void initState() {
@@ -61,7 +60,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
         ],
       ),
-      drawer: MyDrawer(image: image, isActive: isActive, auth: auth),
+      drawer: MyDrawer(isActive: isActive, auth: auth),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.0),

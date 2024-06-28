@@ -22,7 +22,7 @@ class PickImage {
     );
   }
 
-  Future<File?> pickAnImage(BuildContext context) async {
+  Future<XFile?> pickAnImage(BuildContext context) async {
     File? image;
     try {
       final pickedImage =
@@ -30,9 +30,9 @@ class PickImage {
       if (pickedImage != null) {
         image = File(pickedImage.path);
       }
+      return pickedImage;
     } catch (e) {
       print(e.toString());
     }
-    return image;
   }
 }
