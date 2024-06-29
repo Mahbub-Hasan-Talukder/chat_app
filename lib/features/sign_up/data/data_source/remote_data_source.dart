@@ -1,5 +1,6 @@
 import 'package:chat_app/features/sign_up/data/models/sign_up_model.dart';
 import 'package:chat_app/features/sign_up/presentation/widgets/user_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,17 +16,14 @@ class SignUpRemoteDataSource {
   FutureOr<(SignUpModel?, String?)> signUp({required UserData userData}) async {
     try {
       final email = userData.email;
-      final name = userData.name;
       final pass = userData.password;
-      print('before');
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: pass,
       );
-      User? user = credential.user;
-      if (user != null) {
-        return (SignUpModel(user: user!), null);
+      if (credential.user != null) {
+        return (SignUpModel(user: credential.user), null);
       }
     } on FirebaseAuthException catch (e) {
       String? errorMessage;
@@ -39,5 +37,18 @@ class SignUpRemoteDataSource {
       return (null, e.toString());
     }
     return (null, null);
+  }
+
+  void saveUserInfo({
+    required Map<String, dynamic> userMappedData,
+    required String collection,
+    required String uid,
+  }) async {
+    final db = FirebaseFirestore.instance;
+    try {
+      await db.collection(collection).doc(uid).set(userMappedData);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

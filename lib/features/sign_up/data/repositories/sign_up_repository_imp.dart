@@ -19,8 +19,7 @@ class SignUpRepositoryImp implements SignUpRepository {
         await signUpRemoteDataSource.signUp(userData: userData);
 
     if (createdUser.$1 != null) {
-      User user = createdUser.$1!.user;
-      final db = FirebaseFirestore.instance;
+      User user = createdUser.$1!.user!;
       FirebaseAuth auth = FirebaseAuth.instance;
 
       try {
@@ -28,11 +27,11 @@ class SignUpRepositoryImp implements SignUpRepository {
         await user.reload();
         user = auth.currentUser!;
 
-        final saveUserInfo = <String, String>{
-          'name': user.displayName ?? 'No Name',
-          'email': user.email ?? 'No Email',
-        };
-        await db.collection('users').doc(user.uid).set(saveUserInfo);
+        signUpRemoteDataSource.saveUserInfo(
+          userMappedData: SignUpModel.toMap(user: user),
+          collection: 'users',
+          uid: user.uid,
+        );
       } catch (e) {
         return (null, e.toString());
       }
