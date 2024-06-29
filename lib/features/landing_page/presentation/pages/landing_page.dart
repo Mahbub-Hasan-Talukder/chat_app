@@ -5,7 +5,7 @@ import 'package:chat_app/core/service/navigation/routes/routes.dart';
 import 'package:chat_app/core/utils/utils.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
 import 'package:chat_app/features/landing_page/presentation/widgets/list_tile.dart';
-import 'package:chat_app/features/landing_page/presentation/widgets/my_drawer.dart';
+import 'package:chat_app/features/my_drawer/presentation/pages/my_drawer.dart';
 import 'package:chat_app/features/landing_page/presentation/widgets/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,7 +60,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
         ],
       ),
-      drawer: MyDrawer(isActive: isActive, auth: auth),
+      drawer: MyDrawer(),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.0),

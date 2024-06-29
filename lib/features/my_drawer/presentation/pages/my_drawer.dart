@@ -9,14 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MyDrawer extends StatefulWidget {
-  bool isActive;
-  FirebaseAuth auth;
-  MyDrawer({
-    super.key,
-    required this.isActive,
-    required this.auth,
-  });
-
+  FirebaseAuth auth = FirebaseAuth.instance;
+  MyDrawer({super.key});
   @override
   State<MyDrawer> createState() => _MyDrawerState();
 }
@@ -24,6 +18,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   User? user;
   String? imageUrl;
+  bool isActive = true;
   FirebaseAuth auth = FirebaseAuth.instance;
   String? photoLink =
       'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
@@ -31,7 +26,7 @@ class _MyDrawerState extends State<MyDrawer> {
   @override
   void initState() {
     super.initState();
-    user = widget.auth.currentUser;
+    user = auth.currentUser;
     print('in init: ${auth.currentUser?.photoURL}');
     photoLink = (auth.currentUser?.photoURL == null)
         ? Assets.images.emptyPerson.path
@@ -95,7 +90,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     width: 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: (widget.isActive)
+                      color: (isActive)
                           ? Theme.of(context).colorScheme.primary
                           : Colors.transparent,
                     ),
@@ -105,11 +100,11 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
             const SizedBox(height: 15),
             Text(
-              '${widget.auth.currentUser?.displayName}',
+              '${auth.currentUser?.displayName}',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Text(
-              '${widget.auth.currentUser?.email}',
+              '${auth.currentUser?.email}',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 30),
@@ -157,10 +152,10 @@ class _MyDrawerState extends State<MyDrawer> {
                 Transform.scale(
                   scale: 0.8,
                   child: Switch(
-                    value: widget.isActive,
+                    value: isActive,
                     onChanged: (isOn) {
                       setState(() {
-                        widget.isActive = isOn;
+                        isActive = isOn;
                       });
                     },
                   ),
