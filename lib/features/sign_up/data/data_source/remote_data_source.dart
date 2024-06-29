@@ -23,7 +23,7 @@ class SignUpRemoteDataSource {
         password: pass,
       );
       if (credential.user != null) {
-        return (SignUpModel(user: credential.user), null);
+        return (SignUpModel(user: credential.user!), null);
       }
     } on FirebaseAuthException catch (e) {
       String? errorMessage;
