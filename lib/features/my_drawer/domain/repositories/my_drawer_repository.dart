@@ -1,4 +1,3 @@
-
 import 'package:chat_app/features/my_drawer/data/data_source/remote_data_source.dart';
 import 'package:chat_app/features/my_drawer/data/repositories/my_drawer_repository_imp.dart';
 import 'package:chat_app/features/my_drawer/domain/entities/my_drawer_entity.dart';
@@ -15,4 +14,6 @@ MyDrawerRepository myDrawerRepository(Ref ref) {
 
 abstract class MyDrawerRepository {
   FutureOr<(MyDrawerEntity?, String?)> myDrawer();
+  FutureOr<(MyDrawerEntity?, String?)> updateImage({required image});
+  FutureOr<(MyDrawerEntity?, String?)> updateStatus({required status});
 }

@@ -1,5 +1,5 @@
 import 'package:chat_app/features/sign_up/data/models/sign_up_model.dart';
-import 'package:chat_app/features/sign_up/presentation/widgets/user_data.dart';
+import 'package:chat_app/core/utils/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,8 +19,8 @@ class SignUpRemoteDataSource {
       final pass = userData.password;
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: pass,
+        email: email!,
+        password: pass!,
       );
       if (credential.user != null) {
         return (SignUpModel(user: credential.user!), null);

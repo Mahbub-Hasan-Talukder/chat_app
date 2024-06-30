@@ -18,4 +18,12 @@ class MyDrawerUseCase {
   FutureOr<(MyDrawerEntity?, String?)> myDrawer() async {
     return await myDrawerRepository.myDrawer();
   }
+
+  FutureOr<(MyDrawerEntity?, String?)> updateImage({required image}) async {
+    return await myDrawerRepository.updateImage(image: image);
+  }
+
+  FutureOr<(MyDrawerEntity?, String?)> updateStatus({required status}) async {
+    return await myDrawerRepository.updateStatus(status: status);
+  }
 }

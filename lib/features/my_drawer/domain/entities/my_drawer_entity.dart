@@ -1,5 +1,6 @@
+import 'package:chat_app/core/utils/user_data.dart';
+
 class MyDrawerEntity {
-  final String photoLink;
-  bool isActive;
-  MyDrawerEntity({required this.photoLink, required this.isActive});
+  UserData userData;
+  MyDrawerEntity({required this.userData});
 }

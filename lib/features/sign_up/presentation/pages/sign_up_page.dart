@@ -5,7 +5,7 @@ import 'package:chat_app/core/validator/password_validation.dart';
 import 'package:chat_app/core/widgets/custom_password_field.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
 import 'package:chat_app/features/sign_up/presentation/riverpod/sign_up_controller.dart';
-import 'package:chat_app/features/sign_up/presentation/widgets/user_data.dart';
+import 'package:chat_app/core/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
