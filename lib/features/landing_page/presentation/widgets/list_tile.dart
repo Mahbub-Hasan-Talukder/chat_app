@@ -12,14 +12,14 @@ class MyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.only(left: 0),
+      contentPadding: const EdgeInsets.only(left: 0),
       leading: CircleAvatar(
-        backgroundImage: Assets.images.emptyPerson.provider(),
+        backgroundImage: Assets.images.user.provider(),
         radius: 20,
       ),
       title: Text(title),
       subtitle: Text(
-        '$content',
+        content,
         maxLines: 1,
       ),
     );

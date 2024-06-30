@@ -15,9 +15,9 @@ class LoginRemoteDataSource {
   FutureOr<(LoginModel?, String?)> login({required UserData userData}) async {
     final email = userData.email;
     final pass = userData.pass;
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      final credential = await _auth.signInWithEmailAndPassword(
+      final credential = await auth.signInWithEmailAndPassword(
         email: email,
         password: pass,
       );
