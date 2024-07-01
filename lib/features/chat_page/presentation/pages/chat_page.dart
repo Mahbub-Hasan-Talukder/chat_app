@@ -1,12 +1,20 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/widgets/list_tile.dart';
+import 'package:chat_app/features/chat_page/data/data_source/remote_data_source.dart';
+import 'package:chat_app/features/chat_page/presentation/riverpod/message_list_controller.dart';
+import 'package:chat_app/features/chat_page/presentation/widgets/bottom_chat_bar.dart';
+import 'package:chat_app/features/chat_page/presentation/widgets/chat_bubble.dart';
+import 'package:chat_app/features/chat_page/presentation/widgets/user_messages.dart';
+import 'package:chat_app/features/chat_page/utils/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   final String uid;
@@ -26,6 +34,8 @@ class ChatPage extends ConsumerStatefulWidget {
 }
 
 class _ChatPageState extends ConsumerState<ChatPage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   final TextEditingController _messageController = TextEditingController();
 
   @override
@@ -47,64 +57,22 @@ class _ChatPageState extends ConsumerState<ChatPage> {
           photoUrl: widget.photoUrl,
         ),
       ),
-      body: Column(
-        children: [
-          // Expanded(child: _buildChatList(context)), // Display chat messages
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 700),
-                BottomChatBar(messageController: _messageController),
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: UserMessages(uid: widget.uid),
             ),
-          ),
-        ],
+            BottomChatBar(
+              messageController: _messageController,
+              senderId: (auth.currentUser?.uid)!,
+              receiverId: widget.uid,
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
-    );
-  }
-}
-
-class BottomChatBar extends StatelessWidget {
-  const BottomChatBar({
-    super.key,
-    required TextEditingController messageController,
-  }) : _messageController = messageController;
-
-  final TextEditingController _messageController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GestureDetector(
-          child: Image(
-            image: Assets.images.mountainView.provider(),
-            height: 50,
-            width: 50,
-          ),
-          onTap: () {},
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: TextField(
-            controller: _messageController,
-            decoration: const InputDecoration(
-              hintText: 'Type your message...',
-              fillColor: Colors.white,
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        GestureDetector(
-          child: Image(
-            image: Assets.images.paperPlane.provider(),
-            height: 50,
-            width: 50,
-          ),
-          onTap: () {},
-        )
-      ],
     );
   }
 }
