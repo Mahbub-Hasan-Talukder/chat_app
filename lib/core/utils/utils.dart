@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PickImage {
@@ -34,5 +33,6 @@ class PickImage {
     } catch (e) {
       print(e.toString());
     }
+    return null;
   }
 }

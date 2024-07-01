@@ -5,7 +5,7 @@ class UserData {
   String? email;
   String? password;
   String? photoUrl;
-  String? id;
+  String? uid;
   bool? isActive;
   UserData({
     this.name,
@@ -13,14 +13,16 @@ class UserData {
     this.password,
     this.isActive,
     this.photoUrl,
-    this.id,
+    this.uid,
   });
   factory UserData.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
     return UserData(
-      id: doc.id,
+      uid: doc.id,
       name: data['name'] ?? '',
       email: data['email'] ?? '',
+      photoUrl: data['photoUrl'] ?? '',
+      isActive: data['isActive'] ?? '',
     );
   }
 }
