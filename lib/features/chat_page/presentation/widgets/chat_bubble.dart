@@ -17,7 +17,17 @@ class ChatBubble extends StatelessWidget {
         color: message.myMessage
             ? Theme.of(context).colorScheme.primary
             : Theme.of(context).colorScheme.shadow,
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: message.myMessage
+            ? const BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+              )
+            : const BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+              ),
       ),
       child: Column(
         crossAxisAlignment: (message.myMessage)
