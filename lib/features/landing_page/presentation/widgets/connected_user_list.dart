@@ -21,6 +21,7 @@ class ConnectedUserList extends StatelessWidget {
         .snapshots();
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: StreamBuilder<QuerySnapshot>(
         stream: chatsStream,
         builder: (context, snapshot) {
@@ -47,28 +48,10 @@ class ConnectedUserList extends StatelessWidget {
               var senderName = chatData['senderName'] ?? '';
               var receiverName = chatData['receiverName'] ?? '';
               var lastMessageContent = chatData['content'] ?? '';
+
               var time = chatData['time'] != null
                   ? (chatData['time'] as Timestamp).toDate()
                   : DateTime.now();
-              print('sender id in con user list: $senderId');
-              print('receiver id in con user list: $receiverId');
-              // return ListTile(
-              //   title: (currentUserId == senderId)
-              //       ? Text('hi, $receiverName')
-              //       : Text('hi, $senderName'),
-              //   subtitle: Text(lastMessageContent),
-              //   trailing: Text(
-              //     DateFormat('hh:mm a').format(time),
-              //   ),
-              //   onTap: () {
-              //     context.push(MyRoutes.chatPage, extra: {
-              //     'receiverUid': receiverId,
-              //     'receiverName': receiverName,
-              //     'receiverIsActive': ,
-              //     'receiverPhotoUrl': user.photoUrl,
-              //   });
-              //   },
-              // );
 
               return FutureBuilder<DocumentSnapshot>(
                 future: (senderId == currentUserId)
@@ -98,26 +81,70 @@ class ConnectedUserList extends StatelessWidget {
 
                   var userData =
                       userSnapshot.data!.data() as Map<String, dynamic>;
-                  print('here last message in con user: $lastMessageContent');
-                  return ListTile(
-                    title: (currentUserId == senderId)
-                        ? Text('@ $receiverName')
-                        : Text('@ $senderName'),
-                    subtitle: (lastMessageContent.isEmpty)
-                        ? const Text('Sent image')
-                        : Text(lastMessageContent),
-                    trailing: Text(
-                      DateFormat('hh:mm a').format(time),
+                  return Container(
+                    height: 70,
+                    margin: EdgeInsets.only(top: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
                     ),
-                    onTap: () {
-                      context.push(MyRoutes.chatPage, extra: {
-                        'receiverUid': userData['uid'] ?? 'User',
-                        'receiverName': userData['name'] ?? 'uid',
-                        'receiverIsActive': userData['isActive'] ?? false,
-                        'receiverPhotoUrl': userData['photoUrl'],
-                      });
-                      print(userData['uid']);
-                    },
+                    child: ListTile(
+                      leading: Stack(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  userData['photoUrl'],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 8,
+                            child: Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: (userData['isActive'])
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Colors.transparent,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      title: (currentUserId == senderId)
+                          ? Text('@ $receiverName')
+                          : Text('@ $senderName'),
+                      subtitle: (lastMessageContent.isEmpty)
+                          ? const Text('Sent image')
+                          : Text(
+                              lastMessageContent,
+                              maxLines: 1,
+                            ),
+                      trailing: Text(
+                        DateFormat('hh:mm a').format(time),
+                      ),
+                      onTap: () {
+                        context.push(MyRoutes.chatPage, extra: {
+                          'receiverUid': userData['uid'] ?? 'User',
+                          'receiverName': userData['name'] ?? 'uid',
+                          'receiverIsActive': userData['isActive'] ?? false,
+                          'receiverPhotoUrl': userData['photoUrl'],
+                        });
+                      },
+                    ),
                   );
                 },
               );

@@ -68,10 +68,10 @@ class UserSearchDelegate extends SearchDelegate<MyUser> {
             return ListTile(
               onTap: () {
                 context.push(MyRoutes.chatPage, extra: {
-                  'uid': user.uid,
-                  'name': user.name,
-                  'isActive': user.isActive,
-                  'photoUrl': user.photoUrl,
+                  'receiverUid': user.uid,
+                  'receiverName': user.name,
+                  'receiverIsActive': user.isActive,
+                  'receiverPhotoUrl': user.photoUrl,
                 });
               },
               title: Text(user.name!),

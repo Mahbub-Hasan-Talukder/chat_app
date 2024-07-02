@@ -61,6 +61,7 @@ class BottomChatBar extends StatelessWidget {
                     print('Upload progress: ${progress * 100}%');
                     LinearProgressIndicator(
                       value: progress,
+                      color: Theme.of(context).colorScheme.secondary,
                     );
                   });
                   final taskSnapshot = await uploadTask.catchError((error) {
