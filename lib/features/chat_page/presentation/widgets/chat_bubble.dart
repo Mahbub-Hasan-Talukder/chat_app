@@ -34,28 +34,36 @@ class ChatBubble extends StatelessWidget {
             ? CrossAxisAlignment.end
             : CrossAxisAlignment.start,
         children: [
-          RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyLarge,
-              children: [
-                TextSpan(
-                  text: message.content,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.surface),
+          (message.photoUrl == null)
+              ? RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    children: [
+                      TextSpan(
+                        text: message.content,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                      )
+                    ],
+                  ),
                 )
-              ],
-            ),
-          ),
-          SizedBox(height: 5.0),
+              : Image(
+                  image: NetworkImage(
+                    message.photoUrl!,
+                    // scale: 20,
+                  ),
+                ),
+          const SizedBox(height: 5.0),
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 _formatTimestamp(message.time),
-                style: TextStyle(color: Colors.white70, fontSize: 12.0),
+                style: const TextStyle(color: Colors.white70, fontSize: 12.0),
               ),
-              SizedBox(width: 5.0),
+              const SizedBox(width: 5.0),
               Icon(
                 message.seen ? Icons.done_all : Icons.done,
                 color: message.seen ? Colors.blue : Colors.white70,

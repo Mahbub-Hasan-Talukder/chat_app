@@ -1,7 +1,7 @@
-class FeatureName_Entity {
-  final _;
+// class FeatureName_Entity {
+//   final _;
 
-  FeatureName_Entity({
-    required this._,
-  });
-}
+//   FeatureName_Entity({
+//     required this._,
+//   });
+// }

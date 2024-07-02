@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+
 class Message {
   DateTime time;
-  String content;
+  String? content;
   String receiverId;
   String senderId;
   bool seen;
   bool myMessage;
+  String? photoUrl;
 
   Message({
     required this.time,
@@ -13,6 +16,7 @@ class Message {
     required this.myMessage,
     required this.receiverId,
     required this.senderId,
+    required this.photoUrl,
   });
   Map<String, dynamic> toMap() {
     return {
@@ -22,6 +26,7 @@ class Message {
       'myMessage': myMessage,
       'receiverId': receiverId,
       'senderId': senderId,
+      'photoUrl': photoUrl,
     };
   }
 }

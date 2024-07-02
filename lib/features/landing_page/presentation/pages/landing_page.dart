@@ -1,4 +1,4 @@
-import 'package:chat_app/features/landing_page/presentation/widgets/search.dart';
+import 'package:chat_app/features/landing_page/presentation/widgets/searchDelegate.dart';
 import 'package:chat_app/features/my_drawer/presentation/pages/my_drawer.dart';
 import 'package:chat_app/features/landing_page/presentation/widgets/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

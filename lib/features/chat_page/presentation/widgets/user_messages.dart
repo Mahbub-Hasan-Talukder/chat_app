@@ -50,14 +50,14 @@ class UserMessages extends StatelessWidget {
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
                     var data = docs[index].data() as Map<String, dynamic>;
-                    var text = data['content'] ?? 'No message';
-                    var newSenderId = data['senderId'] ?? 'No message';
-                    var newReceiverId = data['receiverId'] ?? 'No message';
+                    var text = data['content'];
+                    var photoUrl = data['photoUrl'];
+                    var newSenderId = data['senderId'];
+                    var newReceiverId = data['receiverId'];
                     var seen = data['seen'] ?? false;
                     var timestamp = data['time'] != null
                         ? (data['time'] as Timestamp).toDate()
                         : DateTime.now();
-
                     return ChatBubble(
                       message: Message(
                         time: timestamp,
@@ -66,6 +66,7 @@ class UserMessages extends StatelessWidget {
                         myMessage: senderId == newSenderId,
                         receiverId: newReceiverId,
                         senderId: newSenderId,
+                        photoUrl: photoUrl,
                       ),
                     );
                   },

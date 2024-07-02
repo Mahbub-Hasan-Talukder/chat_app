@@ -1,7 +1,6 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
-import 'package:chat_app/features/forgot_password/domain/entities/forgot_pass_entity.dart';
 import 'package:chat_app/features/forgot_password/presentation/riverpod/forgot_pass_controller.dart';
 import 'package:chat_app/features/forgot_password/presentation/widgets/my_elevated_button.dart';
 import 'package:flutter/material.dart';
