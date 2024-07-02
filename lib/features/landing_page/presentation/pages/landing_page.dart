@@ -1,3 +1,4 @@
+import 'package:chat_app/features/landing_page/presentation/widgets/connected_user_list.dart';
 import 'package:chat_app/features/landing_page/presentation/widgets/searchDelegate.dart';
 import 'package:chat_app/features/my_drawer/presentation/pages/my_drawer.dart';
 import 'package:chat_app/features/landing_page/presentation/widgets/user.dart';
@@ -53,10 +54,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         ],
       ),
       drawer: const MyDrawer(),
-      body: const SafeArea(
+      body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(),
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          child: ConnectedUserList(),
         ),
       ),
     );

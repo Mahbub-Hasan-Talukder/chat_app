@@ -17,17 +17,17 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
-  final String uid;
-  final String name;
-  final bool isActive;
-  final String photoUrl;
+  final String receiverUid;
+  final String? receiverName;
+  final bool receiverIsActive;
+  final String receiverPhotoUrl;
 
   ChatPage({
     Key? key,
-    required this.uid,
-    required this.name,
-    required this.isActive,
-    required this.photoUrl,
+    required this.receiverUid,
+    required this.receiverName,
+    required this.receiverIsActive,
+    required this.receiverPhotoUrl,
   }) : super(key: key);
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatPageState();
@@ -52,9 +52,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
         title: MyListTile(
-          title: widget.name,
-          content: (widget.isActive) ? 'Online' : 'Offline',
-          photoUrl: widget.photoUrl,
+          title: widget.receiverName ?? 'no reciever name in chate page',
+          content: (widget.receiverIsActive) ? 'Online' : 'Offline',
+          photoUrl: widget.receiverPhotoUrl,
         ),
       ),
       body: Padding(
@@ -62,12 +62,16 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         child: Column(
           children: [
             Expanded(
-              child: UserMessages(uid: widget.uid),
+              child: UserMessages(uid: widget.receiverUid),
             ),
             BottomChatBar(
               messageController: _messageController,
+              senderName: (auth.currentUser?.displayName) ??
+                  'no auth name in chat page',
               senderId: (auth.currentUser?.uid)!,
-              receiverId: widget.uid,
+              receiverName:
+                  widget.receiverName ?? 'no reciever name in chat page',
+              receiverId: widget.receiverUid,
             ),
             const SizedBox(height: 20),
           ],

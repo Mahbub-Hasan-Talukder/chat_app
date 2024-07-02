@@ -58,14 +58,18 @@ class UserMessages extends StatelessWidget {
                     var timestamp = data['time'] != null
                         ? (data['time'] as Timestamp).toDate()
                         : DateTime.now();
+                    var senderName = data['senderName'];
+                    var receiverName = data['receiverName'];
                     return ChatBubble(
                       message: Message(
                         time: timestamp,
                         content: text,
                         seen: seen,
                         myMessage: senderId == newSenderId,
-                        receiverId: newReceiverId,
+                        receiverName: receiverName!,
+                        receiverId: newReceiverId!,
                         senderId: newSenderId,
+                        senderName: senderName!,
                         photoUrl: photoUrl,
                       ),
                     );

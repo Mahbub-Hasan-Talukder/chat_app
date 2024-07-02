@@ -29,10 +29,10 @@ class MyRouterConfig {
           final Map<String, dynamic> extras =
               state.extra as Map<String, dynamic>;
           return ChatPage(
-            uid: extras['uid'],
-            name: extras['name'],
-            isActive: extras['isActive'],
-            photoUrl: extras['photoUrl'],
+            receiverUid: extras['receiverUid'],
+            receiverName: extras['receiverName'],
+            receiverIsActive: extras['receiverIsActive'],
+            receiverPhotoUrl: extras['receiverPhotoUrl'],
           );
         },
       ),

@@ -17,10 +17,13 @@ class BottomChatBar extends StatelessWidget {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   TextEditingController messageController;
   String receiverId, senderId;
+  String receiverName, senderName;
   BottomChatBar({
     super.key,
     required this.messageController,
+    required this.receiverName,
     required this.receiverId,
+    required this.senderName,
     required this.senderId,
   }) : _messageController = messageController;
 
@@ -70,6 +73,8 @@ class BottomChatBar extends StatelessWidget {
                     _saveMessageToFirestore(
                       content: null,
                       downloadUrl: downloadUrl,
+                      senderName: senderName,
+                      receiverName: receiverName,
                     );
                   }
                 } catch (e) {
@@ -104,6 +109,8 @@ class BottomChatBar extends StatelessWidget {
                 _saveMessageToFirestore(
                   content: content,
                   downloadUrl: null,
+                  senderName: senderName,
+                  receiverName: receiverName,
                 );
               }
             },
@@ -114,8 +121,10 @@ class BottomChatBar extends StatelessWidget {
   }
 
   void _saveMessageToFirestore({
-    String? downloadUrl,
-    String? content,
+    required String? downloadUrl,
+    required String? content,
+    required String senderName,
+    required String receiverName,
   }) {
     final newMessage = Message(
       time: DateTime.now(),
@@ -123,7 +132,9 @@ class BottomChatBar extends StatelessWidget {
       content: content,
       seen: true,
       myMessage: true,
+      receiverName: receiverName,
       receiverId: receiverId,
+      senderName: senderName,
       senderId: senderId,
     ).toMap();
     firestore
@@ -135,10 +146,23 @@ class BottomChatBar extends StatelessWidget {
         .add(newMessage);
     firestore
         .collection('users')
+        .doc(senderId)
+        .collection('conversation')
+        .doc(receiverId)
+        .set(newMessage);
+
+    firestore
+        .collection('users')
         .doc(receiverId)
         .collection('conversation')
         .doc(senderId)
         .collection('messages')
         .add(newMessage);
+    firestore
+        .collection('users')
+        .doc(receiverId)
+        .collection('conversation')
+        .doc(senderId)
+        .set(newMessage);
   }
 }
