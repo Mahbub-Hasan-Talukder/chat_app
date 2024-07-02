@@ -28,6 +28,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: RichText(
           text: TextSpan(
@@ -56,7 +57,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       drawer: const MyDrawer(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: ConnectedUserList(),
         ),
       ),
