@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/utils/user_data.dart';
+import 'package:chat_app/core/widgets/profile_picture_holder.dart';
 import 'package:chat_app/features/my_drawer/presentation/riverpod/my_drawer_controller.dart';
 import 'package:chat_app/features/my_drawer/presentation/riverpod/update_image_controller.dart';
 import 'package:chat_app/features/my_drawer/presentation/riverpod/update_status_controller.dart';
@@ -77,20 +79,27 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
             const SizedBox(height: 80),
             Stack(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(3),
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
+                ProfilePictureHolder(
+                  rad: 100,
+                  userData: UserData().toMap(
+                    isActive: isActive,
+                    photoUrl: photoLink,
                   ),
-                  child: (isProfileLoading)
-                      ? const CircularProgressIndicator()
-                      : CircleAvatar(
-                          backgroundImage: NetworkImage(photoLink!),
-                          radius: 20,
-                        ),
                 ),
+                // Container(
+                //   padding: const EdgeInsets.all(3),
+                //   height: 100,
+                //   width: 100,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(100),
+                //   ),
+                //   child: (isProfileLoading)
+                //       ? const CircularProgressIndicator()
+                //       : CircleAvatar(
+                //           backgroundImage: NetworkImage(photoLink!),
+                //           radius: 20,
+                //         ),
+                // ),
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -109,20 +118,20 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 0,
-                  right: 10,
-                  child: Container(
-                    height: 20,
-                    width: 20,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: (isActive)
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 0,
+                //   right: 10,
+                //   child: Container(
+                //     height: 20,
+                //     width: 20,
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(50),
+                //       color: (isActive)
+                //           ? Theme.of(context).colorScheme.primary
+                //           : Colors.transparent,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 15),

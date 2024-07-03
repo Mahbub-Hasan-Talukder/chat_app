@@ -30,6 +30,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.surface,
         title: RichText(
           text: TextSpan(
             style: Theme.of(context).textTheme.bodyLarge,
@@ -47,7 +48,9 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(
+              Icons.search,
+            ),
             onPressed: () {
               showSearch(context: context, delegate: UserSearchDelegate());
             },

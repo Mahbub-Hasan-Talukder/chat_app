@@ -1,4 +1,5 @@
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/widgets/profile_picture_holder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,10 @@ class ConnectedUserList extends StatelessWidget {
               var senderName = chatData['senderName'] ?? '';
               var receiverName = chatData['receiverName'] ?? '';
               var lastMessageContent = chatData['content'] ?? '';
-
+              var lastMessageSeen = chatData['seen'];
+              var unseenMsgCounter = chatData['unseenMsgCounter'];
+              var lastMessageIsMine =
+                  (auth.currentUser?.uid == chatData['senderId']);
               var time = chatData['time'] != null
                   ? (chatData['time'] as Timestamp).toDate()
                   : DateTime.now();
@@ -89,40 +93,9 @@ class ConnectedUserList extends StatelessWidget {
                       color: Colors.white,
                     ),
                     child: ListTile(
-                      leading: Stack(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  userData['photoUrl'],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 8,
-                            child: Container(
-                              height: 10,
-                              width: 10,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: (userData['isActive'])
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent,
-                              ),
-                            ),
-                          ),
-                        ],
+                      leading: ProfilePictureHolder(
+                        userData: userData,
+                        rad: 50,
                       ),
                       title: (currentUserId == senderId)
                           ? Text('@ $receiverName')
@@ -133,10 +106,35 @@ class ConnectedUserList extends StatelessWidget {
                               lastMessageContent,
                               maxLines: 1,
                             ),
-                      trailing: Text(
-                        DateFormat('hh:mm a').format(time),
+                      trailing: Column(
+                        children: [
+                          Text(
+                            DateFormat('hh:mm a').format(time),
+                          ),
+                          (lastMessageIsMine)
+                              ? (lastMessageSeen)
+                                  ? Icon(
+                                      Icons.done_all,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    )
+                                  : Icon(
+                                      Icons.done,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    )
+                              : Text(''),
+                        ],
                       ),
                       onTap: () {
+                        firestore
+                            .collection('users')
+                            .doc(senderId)
+                            .collection('conversation')
+                            .doc(receiverId)
+                            .update({'unseenMsgCounter': 0});
+
                         context.push(MyRoutes.chatPage, extra: {
                           'receiverUid': userData['uid'] ?? 'User',
                           'receiverName': userData['name'] ?? 'uid',
