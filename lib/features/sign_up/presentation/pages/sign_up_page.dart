@@ -220,23 +220,6 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {},
-                      child: RichText(
-                        text: TextSpan(
-                            text: 'Forgot ',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: 'password',
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              )
-                            ]),
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 90),

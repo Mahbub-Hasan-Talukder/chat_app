@@ -45,6 +45,11 @@ class UserMessages extends StatelessWidget {
 
                 final docs = snapshot.data!.docs;
 
+                makeMessagesAsSeen(
+                  senderId: senderId,
+                  receiverId: receiverId,
+                );
+
                 return ListView.builder(
                   reverse: true,
                   itemCount: docs.length,
@@ -71,6 +76,7 @@ class UserMessages extends StatelessWidget {
                         senderId: newSenderId,
                         senderName: senderName!,
                         photoUrl: photoUrl,
+                        unseenMsgCounter: null,
                       ),
                     );
                   },
@@ -81,5 +87,28 @@ class UserMessages extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void makeMessagesAsSeen({senderId, receiverId}) async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    var messagesCollection = db
+        .collection('users')
+        .doc(receiverId)
+        .collection('conversation')
+        .doc(senderId)
+        .collection('messages');
+    var lastMessage = db
+        .collection('users')
+        .doc(receiverId)
+        .collection('conversation')
+        .doc(senderId);
+
+    QuerySnapshot querySnapshot = await messagesCollection.get();
+
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      await messagesCollection.doc(doc.id).update({'seen': true});
+    }
+
+    lastMessage.update({'seen': true});
   }
 }

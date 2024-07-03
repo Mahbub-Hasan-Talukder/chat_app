@@ -15,6 +15,16 @@ class UserData {
     this.photoUrl,
     this.uid,
   });
+  Map<String, dynamic> toMap({
+    isActive,
+    photoUrl,
+  }) {
+    return {
+      'isActive': isActive,
+      'photoUrl': photoUrl,
+    };
+  }
+
   factory UserData.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
     return UserData(

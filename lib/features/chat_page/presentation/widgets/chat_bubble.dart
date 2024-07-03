@@ -51,7 +51,6 @@ class ChatBubble extends StatelessWidget {
               : Image(
                   image: NetworkImage(
                     message.photoUrl!,
-                    // scale: 20,
                   ),
                 ),
           const SizedBox(height: 5.0),
@@ -64,11 +63,13 @@ class ChatBubble extends StatelessWidget {
                 style: const TextStyle(color: Colors.white70, fontSize: 12.0),
               ),
               const SizedBox(width: 5.0),
-              Icon(
-                message.seen ? Icons.done_all : Icons.done,
-                color: message.seen ? Colors.blue : Colors.white70,
-                size: 16.0,
-              ),
+              (message.myMessage)
+                  ? Icon(
+                      message.seen ? Icons.done_all : Icons.done,
+                      color: message.seen ? Colors.blue : Colors.white70,
+                      size: 16.0,
+                    )
+                  : const Text(''),
             ],
           ),
         ],

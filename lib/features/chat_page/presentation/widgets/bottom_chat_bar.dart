@@ -126,40 +126,70 @@ class BottomChatBar extends StatelessWidget {
     required String? content,
     required String senderName,
     required String receiverName,
-  }) {
+  }) async {
+    int? unseenMsgCounter;
+    final docRef = await firestore
+        .collection('users')
+        .doc(senderId)
+        .collection('conversation')
+        .doc(receiverId)
+        .get();
+    final docData = docRef.data();
+
+    // print('before: ${docData!['unseenMsgCounter']} - $unseenMsgCounter');
+    if (docData != null) {
+      // if (docData['unseenMsgCounter'] == null) {
+      //   unseenMsgCounter = 1;
+      // } else {
+      //   unseenMsgCounter = (docData['unseenMsgCounter'] + 1);
+      // }
+      unseenMsgCounter = (docData['unseenMsgCounter'] + 1);
+    } else {
+      unseenMsgCounter = 1;
+    }
+    print('after: $unseenMsgCounter');
+
+    // await firestore
+    //     .collection('users')
+    //     .doc(senderId)
+    //     .collection('conversation')
+    //     .doc(receiverId)
+    //     .update({'unseenMsgCounter': unseenMsgCounter});
+
     final newMessage = Message(
       time: DateTime.now(),
       photoUrl: downloadUrl,
       content: content,
-      seen: true,
+      seen: false,
       myMessage: true,
       receiverName: receiverName,
       receiverId: receiverId,
       senderName: senderName,
       senderId: senderId,
+      unseenMsgCounter: unseenMsgCounter,
     ).toMap();
-    firestore
+    await firestore
         .collection('users')
         .doc(senderId)
         .collection('conversation')
         .doc(receiverId)
         .collection('messages')
         .add(newMessage);
-    firestore
+    await firestore
         .collection('users')
         .doc(senderId)
         .collection('conversation')
         .doc(receiverId)
         .set(newMessage);
 
-    firestore
+    await firestore
         .collection('users')
         .doc(receiverId)
         .collection('conversation')
         .doc(senderId)
         .collection('messages')
         .add(newMessage);
-    firestore
+    await firestore
         .collection('users')
         .doc(receiverId)
         .collection('conversation')
