@@ -11,7 +11,7 @@ class MyElevatedfButtonTheme {
         Size(double.infinity, 55),
       ),
       foregroundColor: const WidgetStatePropertyAll(
-        MyColors.secondary,
+        MyLightColors.secondary,
       ),
       shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(

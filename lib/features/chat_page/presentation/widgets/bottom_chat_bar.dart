@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:chat_app/core/gen/assets.gen.dart';
+import 'package:chat_app/core/theme/colors.dart';
+import 'package:chat_app/core/theme/theme.dart';
+import 'package:chat_app/core/theme/theme_provider.dart';
 import 'package:chat_app/core/widgets/list_tile.dart';
 import 'package:chat_app/features/chat_page/utils/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 
-class BottomChatBar extends StatelessWidget {
+class BottomChatBar extends ConsumerWidget {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   TextEditingController messageController;
   String receiverId, senderId;
@@ -30,7 +33,7 @@ class BottomChatBar extends StatelessWidget {
   final TextEditingController _messageController;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Row(
@@ -90,9 +93,12 @@ class BottomChatBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: _messageController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Type your message...',
-                fillColor: Colors.white,
+                fillColor: (ref.read(themeProviderProvider).value ==
+                        ThemeClass.darkTheme)
+                    ? MyDarkColors.shadow
+                    : MyLightColors.surface,
               ),
             ),
           ),
@@ -136,25 +142,13 @@ class BottomChatBar extends StatelessWidget {
         .get();
     final docData = docRef.data();
 
-    // print('before: ${docData!['unseenMsgCounter']} - $unseenMsgCounter');
     if (docData != null) {
-      // if (docData['unseenMsgCounter'] == null) {
-      //   unseenMsgCounter = 1;
-      // } else {
-      //   unseenMsgCounter = (docData['unseenMsgCounter'] + 1);
-      // }
       unseenMsgCounter = (docData['unseenMsgCounter'] + 1);
     } else {
       unseenMsgCounter = 1;
     }
     print('after: $unseenMsgCounter');
-
-    // await firestore
-    //     .collection('users')
-    //     .doc(senderId)
-    //     .collection('conversation')
-    //     .doc(receiverId)
-    //     .update({'unseenMsgCounter': unseenMsgCounter});
+    final String messageId = DateTime.now().millisecondsSinceEpoch.toString();
 
     final newMessage = Message(
       time: DateTime.now(),
@@ -167,14 +161,18 @@ class BottomChatBar extends StatelessWidget {
       senderName: senderName,
       senderId: senderId,
       unseenMsgCounter: unseenMsgCounter,
+      messageId: messageId,
     ).toMap();
-    await firestore
+
+    var newDocRef = await firestore
         .collection('users')
         .doc(senderId)
         .collection('conversation')
         .doc(receiverId)
         .collection('messages')
-        .add(newMessage);
+        .doc(messageId)
+        .set(newMessage);
+
     await firestore
         .collection('users')
         .doc(senderId)
@@ -182,13 +180,15 @@ class BottomChatBar extends StatelessWidget {
         .doc(receiverId)
         .set(newMessage);
 
-    await firestore
+    newDocRef = await firestore
         .collection('users')
         .doc(receiverId)
         .collection('conversation')
         .doc(senderId)
         .collection('messages')
-        .add(newMessage);
+        .doc(messageId)
+        .set(newMessage);
+
     await firestore
         .collection('users')
         .doc(receiverId)

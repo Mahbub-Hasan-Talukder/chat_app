@@ -54,6 +54,7 @@ class UserMessages extends StatelessWidget {
                   reverse: true,
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
+                    var messageId = docs[index].id;
                     var data = docs[index].data() as Map<String, dynamic>;
                     var text = data['content'];
                     var photoUrl = data['photoUrl'];
@@ -77,6 +78,7 @@ class UserMessages extends StatelessWidget {
                         senderName: senderName!,
                         photoUrl: photoUrl,
                         unseenMsgCounter: null,
+                        messageId: messageId,
                       ),
                     );
                   },

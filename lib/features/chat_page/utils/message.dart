@@ -11,6 +11,7 @@ class Message {
   bool myMessage;
   String? photoUrl;
   int? unseenMsgCounter;
+  String? messageId;
 
   Message({
     required this.time,
@@ -23,6 +24,7 @@ class Message {
     required this.senderName,
     required this.photoUrl,
     required this.unseenMsgCounter,
+    required this.messageId,
   });
   Map<String, dynamic> toMap() {
     return {
@@ -36,6 +38,7 @@ class Message {
       'senderName': senderName,
       'receiverName': receiverName,
       'unseenMsgCounter': unseenMsgCounter,
+      'messageId': messageId,
     };
   }
 }

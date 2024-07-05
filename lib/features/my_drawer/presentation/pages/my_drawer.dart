@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/theme/theme.dart';
+import 'package:chat_app/core/theme/theme_provider.dart';
 import 'package:chat_app/core/utils/user_data.dart';
 import 'package:chat_app/core/widgets/profile_picture_holder.dart';
 import 'package:chat_app/features/my_drawer/presentation/riverpod/my_drawer_controller.dart';
@@ -14,7 +16,6 @@ import 'package:image_picker/image_picker.dart';
 
 class MyDrawer extends ConsumerStatefulWidget {
   const MyDrawer({super.key});
-
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyDrawerState();
 }
@@ -22,7 +23,7 @@ class MyDrawer extends ConsumerStatefulWidget {
 class _MyDrawerState extends ConsumerState<MyDrawer> {
   User? user;
   String? imageUrl;
-  bool isActive = true;
+  bool isActive = true, lightMode = true;
   bool isProfileLoading = true;
   FirebaseAuth auth = FirebaseAuth.instance;
   String? photoLink =
@@ -38,7 +39,8 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(myDrawerControllerProvider);
+    lightMode =
+        (ref.watch(themeProviderProvider).value == ThemeClass.lightTheme);
     ref.listen(myDrawerControllerProvider, (_, next) {
       if (next.value?.$1 != null && next.value?.$2 == null) {
         setState(() {
@@ -86,20 +88,6 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                     photoUrl: photoLink,
                   ),
                 ),
-                // Container(
-                //   padding: const EdgeInsets.all(3),
-                //   height: 100,
-                //   width: 100,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(100),
-                //   ),
-                //   child: (isProfileLoading)
-                //       ? const CircularProgressIndicator()
-                //       : CircleAvatar(
-                //           backgroundImage: NetworkImage(photoLink!),
-                //           radius: 20,
-                //         ),
-                // ),
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -108,7 +96,7 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                     width: 35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: Theme.of(context).colorScheme.shadow,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     child: IconButton(
                       onPressed: () async {
@@ -118,26 +106,12 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                     ),
                   ),
                 ),
-                // Positioned(
-                //   top: 0,
-                //   right: 10,
-                //   child: Container(
-                //     height: 20,
-                //     width: 20,
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(50),
-                //       color: (isActive)
-                //           ? Theme.of(context).colorScheme.primary
-                //           : Colors.transparent,
-                //     ),
-                //   ),
-                // ),
               ],
             ),
             const SizedBox(height: 15),
             Text(
               '${auth.currentUser?.displayName}',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
             Text(
               '${auth.currentUser?.email}',
@@ -163,8 +137,17 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                 Transform.scale(
                   scale: 0.8,
                   child: Switch(
-                    value: true,
-                    onChanged: (isOn) {},
+                    value: lightMode,
+                    onChanged: (isOn) {
+                      if (lightMode) {
+                        ref.read(themeProviderProvider.notifier).state =
+                            AsyncValue.data(ThemeClass.darkTheme);
+                      } else {
+                        ref.read(themeProviderProvider.notifier).state =
+                            AsyncValue.data(ThemeClass.lightTheme);
+                      }
+                      lightMode = isOn;
+                    },
                   ),
                 ),
               ],

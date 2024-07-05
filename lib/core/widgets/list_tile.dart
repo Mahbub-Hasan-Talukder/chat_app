@@ -34,6 +34,7 @@ class MyListTile extends StatelessWidget {
       subtitle: Text(
         content,
         maxLines: 1,
+        style: Theme.of(context).textTheme.bodyMedium,
       ),
     );
   }

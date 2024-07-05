@@ -1,17 +1,23 @@
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/theme/colors.dart';
+import 'package:chat_app/core/theme/theme.dart';
+import 'package:chat_app/core/theme/theme_provider.dart';
 import 'package:chat_app/core/widgets/profile_picture_holder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class ConnectedUserList extends StatelessWidget {
+class ConnectedUserList extends ConsumerWidget {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  ConnectedUserList({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     String currentUserId = auth.currentUser!.uid;
 
     final chatsStream = firestore
@@ -77,7 +83,7 @@ class ConnectedUserList extends StatelessWidget {
                   }
 
                   if (!userSnapshot.hasData) {
-                    return ListTile(
+                    return const ListTile(
                       title: Text('User not found'),
                       subtitle: Text('User not found'),
                     );
@@ -85,12 +91,20 @@ class ConnectedUserList extends StatelessWidget {
 
                   var userData =
                       userSnapshot.data!.data() as Map<String, dynamic>;
+                  var cnt = _countUnreadMessage(
+                    receiverId: userData['recieverId'],
+                    senderId: userData['senderId'],
+                  );
+
                   return Container(
                     height: 70,
                     margin: EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
+                      color: (ref.read(themeProviderProvider).value ==
+                              ThemeClass.darkTheme)
+                          ? MyDarkColors.shadow
+                          : MyLightColors.surface,
                     ),
                     child: ListTile(
                       leading: ProfilePictureHolder(
@@ -124,7 +138,9 @@ class ConnectedUserList extends StatelessWidget {
                                           .colorScheme
                                           .secondary,
                                     )
-                              : Text(''),
+                              : Text(cnt.then((val) async {
+                                  return val;
+                                }).toString()),
                         ],
                       ),
                       onTap: () {
@@ -151,5 +167,27 @@ class ConnectedUserList extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<int> _countUnreadMessage(
+      {required receiverId, required senderId}) async {
+    final docRef = await firestore
+        .collection('users')
+        .doc(senderId)
+        .collection('conversation')
+        .doc(receiverId)
+        .collection('messages')
+        .get();
+    int cnt = 0;
+    print(docRef.docs.length);
+    for (var doc in docRef.docs) {
+      var mp = doc.data();
+      print('here: ' + mp['content']);
+      print(mp['seen']);
+      if (mp['seen'] == false) {
+        cnt = cnt + 1;
+      }
+    }
+    return cnt;
   }
 }

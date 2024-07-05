@@ -4,18 +4,35 @@ import 'package:chat_app/core/theme/input_decoration_theme.dart';
 import 'package:chat_app/core/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeClass {
-  static ThemeData theme = ThemeData(
+  static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     colorScheme: const ColorScheme.light(
-      primary: MyColors.primary,
-      secondary: MyColors.secondary,
-      surface: MyColors.surface,
-      shadow: MyColors.shadow,
+      primary: MyLightColors.primary,
+      secondary: MyLightColors.secondary,
+      surface: MyLightColors.surface,
+      shadow: MyLightColors.shadow,
     ),
-    textTheme: MyTextTheme.myTextTheme,
+    textTheme: MyTextTheme.myLightTextTheme,
     inputDecorationTheme: MyInputDecorationTheme.myInputDecorationTheme,
+    elevatedButtonTheme: MyElevatedfButtonTheme.myElevatedfButtonTheme,
+  );
+
+  static ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    colorScheme: const ColorScheme.light(
+      primary: MyDarkColors.primary,
+      secondary: MyDarkColors.secondary,
+      surface: MyDarkColors.surface,
+      shadow: MyDarkColors.shadow,
+    ),
+    appBarTheme: const AppBarTheme(
+      foregroundColor: MyLightColors.surface,
+    ),
+    textTheme: MyTextTheme.myDarkTextTheme,
+    inputDecorationTheme: MyInputDecorationTheme.myDarkInputDecorationTheme,
     elevatedButtonTheme: MyElevatedfButtonTheme.myElevatedfButtonTheme,
   );
 }

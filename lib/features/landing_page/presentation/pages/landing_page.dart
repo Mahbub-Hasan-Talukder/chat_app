@@ -57,7 +57,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),

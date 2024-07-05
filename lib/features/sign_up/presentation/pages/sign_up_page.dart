@@ -1,5 +1,6 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/utils/google_sign_in.dart';
 import 'package:chat_app/core/validator/email_validator.dart';
 import 'package:chat_app/core/validator/password_validation.dart';
 import 'package:chat_app/core/widgets/custom_password_field.dart';
@@ -247,7 +248,20 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                   style: const ButtonStyle(
                     elevation: WidgetStatePropertyAll(0),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    final userCredential =
+                        await MyGoogleSignIn().signInWithGoogle();
+                    if (userCredential != null) {
+                      // User signed in successfully
+                      final user = userCredential.user;
+                      print(user?.displayName);
+                      context.go(MyRoutes.landingPage);
+                      // Handle user data (e.g., navigate to a home screen)
+                    } else {
+                      // Sign-in failed or canceled
+                      print('Sign-in failed.');
+                    }
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
