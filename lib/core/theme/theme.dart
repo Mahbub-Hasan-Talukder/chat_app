@@ -3,8 +3,6 @@ import 'package:chat_app/core/theme/elevated_button_theme.dart';
 import 'package:chat_app/core/theme/input_decoration_theme.dart';
 import 'package:chat_app/core/theme/text_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeClass {
   static ThemeData lightTheme = ThemeData(

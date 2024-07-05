@@ -1,8 +1,6 @@
 import 'package:chat_app/features/landing_page/presentation/widgets/connected_user_list.dart';
 import 'package:chat_app/features/landing_page/presentation/widgets/searchDelegate.dart';
 import 'package:chat_app/features/my_drawer/presentation/pages/my_drawer.dart';
-import 'package:chat_app/features/landing_page/presentation/widgets/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +55,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
         ],
       ),
-      drawer: MyDrawer(),
+      drawer: const MyDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),

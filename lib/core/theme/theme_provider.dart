@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:chat_app/core/theme/theme.dart';
 import 'package:flutter/material.dart';

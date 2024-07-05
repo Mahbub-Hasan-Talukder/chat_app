@@ -5,8 +5,6 @@ import 'package:chat_app/features/landing_page/presentation/pages/landing_page.d
 import 'package:chat_app/features/login/presentation/pages/login_page.dart';
 import 'package:chat_app/features/sign_up/presentation/pages/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MyRouterConfig {

@@ -33,7 +33,7 @@ class ConnectedUserList extends ConsumerWidget {
         stream: chatsStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
@@ -41,7 +41,7 @@ class ConnectedUserList extends ConsumerWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No chats found.'));
+            return const Center(child: Text('No chats found.'));
           }
 
           final chatDocs = snapshot.data!.docs;
@@ -69,7 +69,7 @@ class ConnectedUserList extends ConsumerWidget {
                     : firestore.collection('users').doc(senderId).get(),
                 builder: (context, userSnapshot) {
                   if (userSnapshot.connectionState == ConnectionState.waiting) {
-                    return ListTile(
+                    return const ListTile(
                       title: Text('Loading...'),
                       subtitle: Text('Loading...'),
                     );
@@ -98,7 +98,7 @@ class ConnectedUserList extends ConsumerWidget {
 
                   return Container(
                     height: 70,
-                    margin: EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: (ref.read(themeProviderProvider).value ==

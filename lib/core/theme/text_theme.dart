@@ -26,7 +26,7 @@ class MyTextTheme {
     ),
     bodySmall: GoogleFonts.poppins(
       fontSize: 11,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: MyLightColors.shadow,
     ),
   );
@@ -53,7 +53,7 @@ class MyTextTheme {
     ),
     bodySmall: GoogleFonts.poppins(
       fontSize: 11,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: MyDarkColors.secondary,
     ),
   );

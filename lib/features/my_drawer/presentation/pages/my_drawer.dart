@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
 import 'package:chat_app/core/theme/theme.dart';
 import 'package:chat_app/core/theme/theme_provider.dart';
@@ -8,7 +7,6 @@ import 'package:chat_app/features/my_drawer/presentation/riverpod/my_drawer_cont
 import 'package:chat_app/features/my_drawer/presentation/riverpod/update_image_controller.dart';
 import 'package:chat_app/features/my_drawer/presentation/riverpod/update_status_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -96,13 +94,16 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                     width: 35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     child: IconButton(
                       onPressed: () async {
                         onProfileTapped();
                       },
-                      icon: const Icon(Icons.add_a_photo_outlined),
+                      icon: Icon(
+                        Icons.add_a_photo_outlined,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
                     ),
                   ),
                 ),
@@ -137,6 +138,7 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                 Transform.scale(
                   scale: 0.8,
                   child: Switch(
+                    inactiveTrackColor: Theme.of(context).colorScheme.secondary,
                     value: lightMode,
                     onChanged: (isOn) {
                       if (lightMode) {
@@ -171,6 +173,7 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                 Transform.scale(
                   scale: 0.8,
                   child: Switch(
+                    inactiveTrackColor: Theme.of(context).colorScheme.secondary,
                     value: isActive,
                     onChanged: (isOn) {
                       setState(() {

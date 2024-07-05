@@ -1,4 +1,3 @@
-import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class MyListTile extends StatelessWidget {

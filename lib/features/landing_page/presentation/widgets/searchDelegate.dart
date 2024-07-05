@@ -6,6 +6,30 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class UserSearchDelegate extends SearchDelegate<MyUser> {
+  // @override
+  // // TODO: implement searchFieldStyle
+  // TextStyle? get searchFieldStyle => TextStyle(color: Theme.of(context).colorScheme.secondary);
+
+  @override
+  Widget? buildFlexibleSpace(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.shadow,
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return _buildSearchResults();
+  }
+
+  // @override
+  // PreferredSizeWidget? buildBottom(BuildContext context) {
+  //   return PreferredSize(
+  //     preferredSize: Size.fromHeight(400),
+  //     child: Container(),
+  //   );
+  // }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -26,11 +50,6 @@ class UserSearchDelegate extends SearchDelegate<MyUser> {
         Navigator.of(context).pop();
       },
     );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return _buildSearchResults();
   }
 
   @override

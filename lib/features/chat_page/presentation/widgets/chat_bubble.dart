@@ -1,5 +1,3 @@
-import 'package:chat_app/core/theme/theme.dart';
-import 'package:chat_app/core/theme/theme_provider.dart';
 import 'package:chat_app/features/chat_page/utils/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,16 +27,16 @@ class ChatBubble extends ConsumerWidget {
         children: [
           (!message.myMessage && message.photoUrl != null)
               ? CircleAvatar(
+                  radius: 30,
                   child: Image(
                     image: NetworkImage(message.photoUrl!),
                   ),
-                  radius: 30,
                 )
               : const SizedBox(),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
             padding: const EdgeInsets.all(10.0),
-            // width: MediaQuery.of(context).size.width * .7,
+            width: MediaQuery.of(context).size.width * .8,
             decoration: BoxDecoration(
               color: message.myMessage
                   ? Theme.of(context).colorScheme.primary
@@ -67,7 +65,7 @@ class ChatBubble extends ConsumerWidget {
                           children: [
                             TextSpan(
                               text: message.content,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
                             ),
@@ -148,10 +146,10 @@ class ChatBubble extends ConsumerWidget {
           ),
           (message.myMessage && message.photoUrl != null)
               ? CircleAvatar(
+                  radius: 30,
                   child: Image(
                     image: NetworkImage(message.photoUrl!),
                   ),
-                  radius: 30,
                 )
               : const SizedBox(),
         ],
@@ -161,14 +159,14 @@ class ChatBubble extends ConsumerWidget {
 
   Future<void> _editMessage(BuildContext context, WidgetRef ref) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    final myDocRef = await db
+    final myDocRef = db
         .collection('users')
         .doc(message.senderId)
         .collection('conversation')
         .doc(message.receiverId)
         .collection('messages')
         .doc(message.messageId);
-    final otherDocRef = await db
+    final otherDocRef = db
         .collection('users')
         .doc(message.receiverId)
         .collection('conversation')
@@ -187,6 +185,7 @@ class ChatBubble extends ConsumerWidget {
             title: Column(
               children: [
                 TextField(
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.shadow,
@@ -262,7 +261,7 @@ class ChatBubble extends ConsumerWidget {
         .collection('messages')
         .orderBy('time')
         .get();
-    if (myDocRef.docs.length == 0) {
+    if (myDocRef.docs.isEmpty) {
       await firestore
           .collection('users')
           .doc(senderId)

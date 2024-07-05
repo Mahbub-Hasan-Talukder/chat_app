@@ -4,16 +4,11 @@ import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/theme/colors.dart';
 import 'package:chat_app/core/theme/theme.dart';
 import 'package:chat_app/core/theme/theme_provider.dart';
-import 'package:chat_app/core/widgets/list_tile.dart';
 import 'package:chat_app/features/chat_page/utils/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 
 class BottomChatBar extends ConsumerWidget {
