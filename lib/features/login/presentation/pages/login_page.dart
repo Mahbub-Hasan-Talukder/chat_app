@@ -77,6 +77,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     });
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(

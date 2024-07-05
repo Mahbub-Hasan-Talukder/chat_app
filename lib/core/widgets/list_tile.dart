@@ -1,4 +1,3 @@
-import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class MyListTile extends StatelessWidget {
@@ -34,6 +33,7 @@ class MyListTile extends StatelessWidget {
       subtitle: Text(
         content,
         maxLines: 1,
+        style: Theme.of(context).textTheme.bodyMedium,
       ),
     );
   }

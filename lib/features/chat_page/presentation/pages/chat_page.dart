@@ -1,20 +1,10 @@
-import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/widgets/list_tile.dart';
-import 'package:chat_app/features/chat_page/data/data_source/remote_data_source.dart';
-import 'package:chat_app/features/chat_page/presentation/riverpod/message_list_controller.dart';
 import 'package:chat_app/features/chat_page/presentation/widgets/bottom_chat_bar.dart';
-import 'package:chat_app/features/chat_page/presentation/widgets/chat_bubble.dart';
 import 'package:chat_app/features/chat_page/presentation/widgets/user_messages.dart';
-import 'package:chat_app/features/chat_page/utils/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:intl/intl.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   final String receiverUid;
@@ -22,13 +12,13 @@ class ChatPage extends ConsumerStatefulWidget {
   final bool receiverIsActive;
   final String receiverPhotoUrl;
 
-  ChatPage({
-    Key? key,
+  const ChatPage({
+    super.key,
     required this.receiverUid,
     required this.receiverName,
     required this.receiverIsActive,
     required this.receiverPhotoUrl,
-  }) : super(key: key);
+  });
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatPageState();
 }

@@ -1,7 +1,5 @@
 import 'package:chat_app/features/my_drawer/domain/entities/my_drawer_entity.dart';
 import 'package:chat_app/features/my_drawer/domain/use_cases/my_drawer_use_case.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'update_image_controller.g.dart';

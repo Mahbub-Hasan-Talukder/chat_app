@@ -3,7 +3,6 @@ import 'package:chat_app/features/chat_page/utils/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserMessages extends StatelessWidget {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -32,7 +31,7 @@ class UserMessages extends StatelessWidget {
               stream: data,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 if (snapshot.hasError) {
@@ -40,7 +39,7 @@ class UserMessages extends StatelessWidget {
                 }
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('No messages found.'));
+                  return const Center(child: Text('No messages found.'));
                 }
 
                 final docs = snapshot.data!.docs;
@@ -54,6 +53,7 @@ class UserMessages extends StatelessWidget {
                   reverse: true,
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
+                    var messageId = docs[index].id;
                     var data = docs[index].data() as Map<String, dynamic>;
                     var text = data['content'];
                     var photoUrl = data['photoUrl'];
@@ -77,6 +77,7 @@ class UserMessages extends StatelessWidget {
                         senderName: senderName!,
                         photoUrl: photoUrl,
                         unseenMsgCounter: null,
+                        messageId: messageId,
                       ),
                     );
                   },
