@@ -23,4 +23,8 @@ class SignUpUseCase {
       userData: userData,
     );
   }
+
+  void saveGoogleUser({required user}) {
+    signUpRepository.saveGoogleUser(user: user);
+  }
 }

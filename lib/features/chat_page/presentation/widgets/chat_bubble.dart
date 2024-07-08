@@ -27,10 +27,10 @@ class ChatBubble extends ConsumerWidget {
         children: [
           (!message.myMessage && message.photoUrl != null)
               ? CircleAvatar(
-                  radius: 30,
                   child: Image(
                     image: NetworkImage(message.photoUrl!),
                   ),
+                  radius: 30,
                 )
               : const SizedBox(),
           Container(
@@ -65,7 +65,7 @@ class ChatBubble extends ConsumerWidget {
                           children: [
                             TextSpan(
                               text: message.content,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
@@ -146,10 +146,10 @@ class ChatBubble extends ConsumerWidget {
           ),
           (message.myMessage && message.photoUrl != null)
               ? CircleAvatar(
-                  radius: 30,
                   child: Image(
                     image: NetworkImage(message.photoUrl!),
                   ),
+                  radius: 30,
                 )
               : const SizedBox(),
         ],
@@ -159,14 +159,14 @@ class ChatBubble extends ConsumerWidget {
 
   Future<void> _editMessage(BuildContext context, WidgetRef ref) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    final myDocRef = db
+    final myDocRef = await db
         .collection('users')
         .doc(message.senderId)
         .collection('conversation')
         .doc(message.receiverId)
         .collection('messages')
         .doc(message.messageId);
-    final otherDocRef = db
+    final otherDocRef = await db
         .collection('users')
         .doc(message.receiverId)
         .collection('conversation')
@@ -185,7 +185,7 @@ class ChatBubble extends ConsumerWidget {
             title: Column(
               children: [
                 TextField(
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.shadow,

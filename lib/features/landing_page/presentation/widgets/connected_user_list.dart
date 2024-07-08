@@ -62,7 +62,7 @@ class ConnectedUserList extends ConsumerWidget {
               var time = chatData['time'] != null
                   ? (chatData['time'] as Timestamp).toDate()
                   : DateTime.now();
-
+              print('unseen: ' + unseenMsgCounter.toString() ?? 'null');
               return FutureBuilder<DocumentSnapshot>(
                 future: (senderId == currentUserId)
                     ? firestore.collection('users').doc(receiverId).get()
@@ -88,14 +88,8 @@ class ConnectedUserList extends ConsumerWidget {
                       subtitle: Text('User not found'),
                     );
                   }
-
                   var userData =
                       userSnapshot.data!.data() as Map<String, dynamic>;
-                  var cnt = _countUnreadMessage(
-                    receiverId: userData['recieverId'],
-                    senderId: userData['senderId'],
-                  );
-
                   return Container(
                     height: 70,
                     margin: const EdgeInsets.only(top: 10),
@@ -138,17 +132,42 @@ class ConnectedUserList extends ConsumerWidget {
                                           .colorScheme
                                           .secondary,
                                     )
-                              : Text(cnt.then((val) async {
-                                  return val;
-                                }).toString()),
+                              : (unseenMsgCounter > 0)
+                                  ? Stack(
+                                      children: [
+                                        Container(
+                                          height: 20,
+                                          width: 20,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '$unseenMsgCounter',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .surface),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : const Text(''),
+                          // cnt.then((val) async {
+                          //     return val;
+                          //   }).toString()
                         ],
                       ),
                       onTap: () {
                         firestore
                             .collection('users')
-                            .doc(senderId)
-                            .collection('conversation')
                             .doc(receiverId)
+                            .collection('conversation')
+                            .doc(senderId)
                             .update({'unseenMsgCounter': 0});
 
                         context.push(MyRoutes.chatPage, extra: {
@@ -169,8 +188,10 @@ class ConnectedUserList extends ConsumerWidget {
     );
   }
 
-  Future<int> _countUnreadMessage(
-      {required receiverId, required senderId}) async {
+  Future<int> _countUnreadMessage({
+    required receiverId,
+    required senderId,
+  }) async {
     final docRef = await firestore
         .collection('users')
         .doc(senderId)
@@ -179,11 +200,8 @@ class ConnectedUserList extends ConsumerWidget {
         .collection('messages')
         .get();
     int cnt = 0;
-    print(docRef.docs.length);
     for (var doc in docRef.docs) {
       var mp = doc.data();
-      print('here: ' + mp['content']);
-      print(mp['seen']);
       if (mp['seen'] == false) {
         cnt = cnt + 1;
       }

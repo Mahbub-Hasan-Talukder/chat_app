@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDrawer extends ConsumerStatefulWidget {
   const MyDrawer({super.key});
@@ -26,12 +27,13 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
   FirebaseAuth auth = FirebaseAuth.instance;
   String? photoLink =
       'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
-
+  SharedPreferences? prefs;
   @override
   void initState() {
     super.initState();
-    Future(() {
+    Future(() async {
       ref.read(myDrawerControllerProvider.notifier).myDrawer();
+      prefs = await SharedPreferences.getInstance();
     });
   }
 
@@ -200,6 +202,7 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
               onPressed: () async {
                 try {
                   await FirebaseAuth.instance.signOut();
+                  prefs?.setBool('enableCheckBox', false);
                   context.go(MyRoutes.login);
                 } on FirebaseAuthException catch (e) {
                   showDialog(

@@ -1,14 +1,17 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/utils/google_sign_in.dart';
 import 'package:chat_app/core/validator/email_validator.dart';
 import 'package:chat_app/core/validator/password_validation.dart';
 import 'package:chat_app/core/widgets/custom_password_field.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
 import 'package:chat_app/features/login/presentation/riverpod/login_controller.dart';
 import 'package:chat_app/features/login/presentation/widgets/user_data.dart';
+import 'package:chat_app/features/sign_up/presentation/riverpod/sign_up_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -22,6 +25,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController passCtr = TextEditingController();
   String? emailFieldError, passFieldError;
   bool enableCheckbox = false;
+  SharedPreferences? prefs;
 
   ({bool isEmailEnable, bool isPassEnable}) buttonNotifier = (
     isEmailEnable: false,
@@ -31,6 +35,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   void initState() {
     super.initState();
+    Future(() async {
+      prefs = await SharedPreferences.getInstance();
+      prefs?.setBool('enableCheckbox', false);
+    });
     emailCtr.addListener(() {
       _enableButtonState();
     });
@@ -55,6 +63,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (next.value?.$1 == null && next.value?.$2 == null) {
         const CircularProgressIndicator();
       } else if (next.value?.$1 != null && next.value?.$2 == null) {
+        if (enableCheckbox) {
+          prefs?.setBool('enableCheckBox', true);
+        }
         context.push(MyRoutes.landingPage);
       } else if (next.value?.$1 == null && next.value?.$2 != null) {
         showDialog(
@@ -97,7 +108,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           style: Theme.of(context).textTheme.headlineLarge,
                           children: [
                             TextSpan(
-                              text: 'Barta!',
+                              text: 'Baarta!',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -308,7 +319,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   style: const ButtonStyle(
                     elevation: WidgetStatePropertyAll(0),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    final userCredential =
+                        await MyGoogleSignIn().signInWithGoogle();
+                    if (userCredential != null) {
+                      final user = userCredential.user;
+                      ref
+                          .read(signUpControllerProvider.notifier)
+                          .saveGoogleUser(user: user);
+                      print(user?.displayName);
+                      context.go(MyRoutes.landingPage);
+                    } else {
+                      print('Sign-in failed.');
+                    }
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

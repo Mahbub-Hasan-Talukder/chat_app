@@ -34,7 +34,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
             style: Theme.of(context).textTheme.bodyLarge,
             children: [
               TextSpan(
-                text: 'Barta',
+                text: 'Baarta',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.surface,
                   fontSize: 30,
