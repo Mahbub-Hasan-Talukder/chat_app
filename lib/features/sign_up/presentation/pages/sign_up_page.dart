@@ -252,13 +252,13 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                     final userCredential =
                         await MyGoogleSignIn().signInWithGoogle();
                     if (userCredential != null) {
-                      // User signed in successfully
                       final user = userCredential.user;
+                      ref
+                          .read(signUpControllerProvider.notifier)
+                          .saveGoogleUser(user: user);
                       print(user?.displayName);
                       context.go(MyRoutes.landingPage);
-                      // Handle user data (e.g., navigate to a home screen)
                     } else {
-                      // Sign-in failed or canceled
                       print('Sign-in failed.');
                     }
                   },

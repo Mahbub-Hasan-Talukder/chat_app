@@ -11,6 +11,7 @@ import 'package:chat_app/features/sign_up/presentation/riverpod/sign_up_controll
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -24,6 +25,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController passCtr = TextEditingController();
   String? emailFieldError, passFieldError;
   bool enableCheckbox = false;
+  SharedPreferences? prefs;
 
   ({bool isEmailEnable, bool isPassEnable}) buttonNotifier = (
     isEmailEnable: false,
@@ -33,6 +35,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   void initState() {
     super.initState();
+    Future(() async {
+      prefs = await SharedPreferences.getInstance();
+      prefs?.setBool('enableCheckbox', false);
+    });
     emailCtr.addListener(() {
       _enableButtonState();
     });
@@ -57,6 +63,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (next.value?.$1 == null && next.value?.$2 == null) {
         const CircularProgressIndicator();
       } else if (next.value?.$1 != null && next.value?.$2 == null) {
+        if (enableCheckbox) {
+          prefs?.setBool('enableCheckBox', true);
+        }
         context.push(MyRoutes.landingPage);
       } else if (next.value?.$1 == null && next.value?.$2 != null) {
         showDialog(
@@ -99,7 +108,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           style: Theme.of(context).textTheme.headlineLarge,
                           children: [
                             TextSpan(
-                              text: 'Barta!',
+                              text: 'Baarta!',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                               ),

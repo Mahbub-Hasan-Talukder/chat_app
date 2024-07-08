@@ -138,9 +138,10 @@ class ConnectedUserList extends ConsumerWidget {
                                           .colorScheme
                                           .secondary,
                                     )
-                              : Text(cnt.then((val) async {
-                                  return val;
-                                }).toString()),
+                              : const Text(''),
+                          // cnt.then((val) async {
+                          //     return val;
+                          //   }).toString()
                         ],
                       ),
                       onTap: () {

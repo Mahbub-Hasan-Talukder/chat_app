@@ -90,6 +90,11 @@ class BottomChatBar extends ConsumerWidget {
               controller: _messageController,
               decoration: InputDecoration(
                 hintText: 'Type your message...',
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.shadow,
+                  ),
+                ),
                 fillColor: (ref.read(themeProviderProvider).value ==
                         ThemeClass.darkTheme)
                     ? MyDarkColors.shadow

@@ -63,7 +63,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                   widget.receiverName ?? 'no reciever name in chat page',
               receiverId: widget.receiverUid,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
           ],
         ),
       ),
