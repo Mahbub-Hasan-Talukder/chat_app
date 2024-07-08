@@ -1,11 +1,13 @@
 import 'package:chat_app/core/gen/assets.gen.dart';
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
+import 'package:chat_app/core/utils/google_sign_in.dart';
 import 'package:chat_app/core/validator/email_validator.dart';
 import 'package:chat_app/core/validator/password_validation.dart';
 import 'package:chat_app/core/widgets/custom_password_field.dart';
 import 'package:chat_app/core/widgets/custom_text_field.dart';
 import 'package:chat_app/features/login/presentation/riverpod/login_controller.dart';
 import 'package:chat_app/features/login/presentation/widgets/user_data.dart';
+import 'package:chat_app/features/sign_up/presentation/riverpod/sign_up_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -308,7 +310,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   style: const ButtonStyle(
                     elevation: WidgetStatePropertyAll(0),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    final userCredential =
+                        await MyGoogleSignIn().signInWithGoogle();
+                    if (userCredential != null) {
+                      final user = userCredential.user;
+                      ref
+                          .read(signUpControllerProvider.notifier)
+                          .saveGoogleUser(user: user);
+                      print(user?.displayName);
+                      context.go(MyRoutes.landingPage);
+                    } else {
+                      print('Sign-in failed.');
+                    }
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

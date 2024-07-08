@@ -17,4 +17,5 @@ abstract class SignUpRepository {
   FutureOr<(SignUpEntity?, String?)> signUp({
     required UserData userData,
   });
+  void saveGoogleUser({required user});
 }
