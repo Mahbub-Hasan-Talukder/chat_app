@@ -1,6 +1,6 @@
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
 import 'package:chat_app/core/utils/user_data.dart';
-import 'package:chat_app/features/landing_page/presentation/widgets/user.dart';
+import 'package:chat_app/features/home_page/presentation/widgets/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -86,12 +86,15 @@ class UserSearchDelegate extends SearchDelegate<MyUser> {
             final user = snapshot.data![index];
             return ListTile(
               onTap: () {
-                context.push(MyRoutes.chatPage, extra: {
-                  'receiverUid': user.uid,
-                  'receiverName': user.name,
-                  'receiverIsActive': user.isActive,
-                  'receiverPhotoUrl': user.photoUrl,
-                });
+                context.push(
+                  MyRoutes.chatPage,
+                  extra: {
+                    'receiverUid': user.uid,
+                    'receiverName': user.name,
+                    'receiverIsActive': user.isActive,
+                    'receiverPhotoUrl': user.photoUrl,
+                  },
+                );
               },
               title: Text(user.name!),
               subtitle: Text(user.email!),

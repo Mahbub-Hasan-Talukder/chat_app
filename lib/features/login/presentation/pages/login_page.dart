@@ -66,7 +66,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         if (enableCheckbox) {
           prefs?.setBool('enableCheckBox', true);
         }
-        context.push(MyRoutes.landingPage);
+        context.push(MyRoutes.homePage);
       } else if (next.value?.$1 == null && next.value?.$2 != null) {
         showDialog(
           context: context,
@@ -327,8 +327,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ref
                           .read(signUpControllerProvider.notifier)
                           .saveGoogleUser(user: user);
-                      print(user?.displayName);
-                      context.go(MyRoutes.landingPage);
+                      context.go(MyRoutes.homePage);
                     } else {
                       print('Sign-in failed.');
                     }

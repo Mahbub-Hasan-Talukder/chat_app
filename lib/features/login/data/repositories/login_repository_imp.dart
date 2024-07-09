@@ -14,7 +14,6 @@ class LoginRepositoryImp implements LoginRepository {
     required UserData userData,
   }) async {
     final res = await loginRemoteDataSource.login(userData: userData);
-    if (res.$1?.user != null) print(res.$1!.user.uid);
     return res;
   }
 }

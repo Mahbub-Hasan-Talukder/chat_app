@@ -26,13 +26,7 @@ class LoginRemoteDataSource {
         return (LoginModel(user: user), null);
       }
     } on FirebaseAuthException catch (e) {
-      String? errorMessage;
-      if (e.code == 'user-not-found') {
-        errorMessage = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        errorMessage = 'Wrong password provided for that user.';
-      }
-      return (null, errorMessage);
+      return (null, e.code);
     } catch (e) {
       return (null, e.toString());
     }

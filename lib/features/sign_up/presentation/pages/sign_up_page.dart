@@ -256,8 +256,7 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                       ref
                           .read(signUpControllerProvider.notifier)
                           .saveGoogleUser(user: user);
-                      print(user?.displayName);
-                      context.go(MyRoutes.landingPage);
+                      context.go(MyRoutes.homePage);
                     } else {
                       print('Sign-in failed.');
                     }

@@ -23,7 +23,6 @@ class MyGoogleSignIn {
 
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       print(e.message);
       return null;
     }

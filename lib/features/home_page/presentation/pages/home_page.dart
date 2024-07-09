@@ -1,18 +1,18 @@
-import 'package:chat_app/features/landing_page/presentation/widgets/connected_user_list.dart';
-import 'package:chat_app/features/landing_page/presentation/widgets/searchDelegate.dart';
+import 'package:chat_app/features/home_page/presentation/widgets/connected_user_list.dart';
+import 'package:chat_app/features/home_page/presentation/widgets/searchDelegate.dart';
 import 'package:chat_app/features/my_drawer/presentation/pages/my_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LandingPage extends ConsumerStatefulWidget {
-  const LandingPage({super.key});
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _LandingPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
-class _LandingPageState extends ConsumerState<LandingPage> {
+class _HomePageState extends ConsumerState<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isDarkMode = false;
   late bool isActive;
