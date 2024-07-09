@@ -56,14 +56,13 @@ class BottomChatBar extends ConsumerWidget {
                   final uploadTask = storageRef.putFile(imageFile);
                   uploadTask.snapshotEvents.listen((event) {
                     final progress = event.bytesTransferred / event.totalBytes;
-                    print('Upload progress: ${progress * 100}%');
+                    // print('Upload progress: ${progress * 100}%');
                     LinearProgressIndicator(
                       value: progress,
                       color: Theme.of(context).colorScheme.secondary,
                     );
                   });
                   final taskSnapshot = await uploadTask.catchError((error) {
-                    print('Upload error: $error');
                     throw Exception('Failed to upload image');
                   });
                   String downloadUrl = await taskSnapshot.ref.getDownloadURL();
@@ -92,7 +91,7 @@ class BottomChatBar extends ConsumerWidget {
                 hintText: 'Type your message...',
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.shadow,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 fillColor: (ref.read(themeProviderProvider).value ==
@@ -147,7 +146,6 @@ class BottomChatBar extends ConsumerWidget {
     } else {
       unseenMsgCounter = 1;
     }
-    print('after: $unseenMsgCounter');
     final String messageId = DateTime.now().millisecondsSinceEpoch.toString();
 
     final newMessage = Message(

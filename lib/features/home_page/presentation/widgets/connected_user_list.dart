@@ -62,7 +62,6 @@ class ConnectedUserList extends ConsumerWidget {
               var time = chatData['time'] != null
                   ? (chatData['time'] as Timestamp).toDate()
                   : DateTime.now();
-              print('unseen: ' + unseenMsgCounter.toString() ?? 'null');
               return FutureBuilder<DocumentSnapshot>(
                 future: (senderId == currentUserId)
                     ? firestore.collection('users').doc(receiverId).get()
@@ -106,19 +105,25 @@ class ConnectedUserList extends ConsumerWidget {
                         rad: 50,
                       ),
                       title: (currentUserId == senderId)
-                          ? Text('@ $receiverName')
+                          ? Text(
+                              '@ $receiverName',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            )
                           : Text('@ $senderName'),
                       subtitle: (lastMessageContent.isEmpty)
                           ? const Text('Sent image')
                           : Text(
                               lastMessageContent,
                               maxLines: 1,
+                              style: (lastMessageIsMine && unseenMsgCounter > 0)
+                                  ? const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    )
+                                  : null,
                             ),
                       trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            DateFormat('hh:mm a').format(time),
-                          ),
                           (lastMessageIsMine)
                               ? (lastMessageSeen)
                                   ? Icon(
@@ -157,9 +162,9 @@ class ConnectedUserList extends ConsumerWidget {
                                       ],
                                     )
                                   : const Text(''),
-                          // cnt.then((val) async {
-                          //     return val;
-                          //   }).toString()
+                          Text(
+                            DateFormat('hh:mm a').format(time),
+                          ),
                         ],
                       ),
                       onTap: () {
@@ -186,26 +191,5 @@ class ConnectedUserList extends ConsumerWidget {
         },
       ),
     );
-  }
-
-  Future<int> _countUnreadMessage({
-    required receiverId,
-    required senderId,
-  }) async {
-    final docRef = await firestore
-        .collection('users')
-        .doc(senderId)
-        .collection('conversation')
-        .doc(receiverId)
-        .collection('messages')
-        .get();
-    int cnt = 0;
-    for (var doc in docRef.docs) {
-      var mp = doc.data();
-      if (mp['seen'] == false) {
-        cnt = cnt + 1;
-      }
-    }
-    return cnt;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:chat_app/core/service/navigation/routes/routes.dart';
 import 'package:chat_app/features/chat_page/presentation/pages/chat_page.dart';
 import 'package:chat_app/features/forgot_password/presentation/pages/forgot_pw_page.dart';
-import 'package:chat_app/features/landing_page/presentation/pages/landing_page.dart';
+import 'package:chat_app/features/home_page/presentation/pages/home_page.dart';
 import 'package:chat_app/features/login/presentation/pages/login_page.dart';
 import 'package:chat_app/features/sign_up/presentation/pages/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +12,7 @@ class MyRouterConfig {
   static final router = GoRouter(
     // initialLocation: (FirebaseAuth.instance.currentUser == null)
     //     ? MyRoutes.login
-    //     : MyRoutes.landingPage,
+    //     : MyRoutes.homePage,
     initialLocation: '/',
     routes: [
       GoRoute(
@@ -28,8 +28,8 @@ class MyRouterConfig {
         builder: (context, state) => const ForgotPwPage(),
       ),
       GoRoute(
-        path: MyRoutes.landingPage,
-        builder: (context, state) => const LandingPage(),
+        path: MyRoutes.homePage,
+        builder: (context, state) => const HomePage(),
       ),
       GoRoute(
         path: MyRoutes.chatPage,
@@ -52,7 +52,7 @@ class MyRouterConfig {
       if (auth.currentUser != null &&
           isLoggedIn == true &&
           state.fullPath == '/') {
-        return MyRoutes.landingPage;
+        return MyRoutes.homePage;
       } else if (isLoggedIn == false && state.fullPath == '/') {
         return MyRoutes.login;
       }

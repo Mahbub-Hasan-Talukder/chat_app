@@ -203,7 +203,7 @@ class _MyDrawerState extends ConsumerState<MyDrawer> {
                 try {
                   await FirebaseAuth.instance.signOut();
                   prefs?.setBool('enableCheckBox', false);
-                  context.go(MyRoutes.login);
+                  context.pushReplacement(MyRoutes.login);
                 } on FirebaseAuthException catch (e) {
                   showDialog(
                     context: context,

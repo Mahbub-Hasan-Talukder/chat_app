@@ -27,10 +27,10 @@ class ChatBubble extends ConsumerWidget {
         children: [
           (!message.myMessage && message.photoUrl != null)
               ? CircleAvatar(
+                  radius: 30,
                   child: Image(
                     image: NetworkImage(message.photoUrl!),
                   ),
-                  radius: 30,
                 )
               : const SizedBox(),
           Container(
@@ -65,7 +65,7 @@ class ChatBubble extends ConsumerWidget {
                           children: [
                             TextSpan(
                               text: message.content,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
                             ),
@@ -146,10 +146,10 @@ class ChatBubble extends ConsumerWidget {
           ),
           (message.myMessage && message.photoUrl != null)
               ? CircleAvatar(
+                  radius: 30,
                   child: Image(
                     image: NetworkImage(message.photoUrl!),
                   ),
-                  radius: 30,
                 )
               : const SizedBox(),
         ],
