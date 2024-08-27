@@ -1,16 +1,20 @@
 # chat_app
 
-A new Flutter project.
+A dynamic and user-friendly chat application built using Flutter and Firebase. The app includes essential features such as user registration, login, real-time messaging, profile management, and more.
 
+# Features
+- User Registration & Login: Secure user authentication with email and password.
+- Password Reset: Allows users to reset their password via email.
+- Real-time Messaging: Users can send and receive messages in real-time.
+- Message Editing & Deletion: Messages can be edited or deleted after being sent.
+- Active Status: Users can toggle their active status on or off.
+- Profile Management: Users can update their profile information including name, avatar, and status message.
+- Responsive UI: Optimized for both mobile and tablet screens with a clean and intuitive user interface.
+  
 ## Getting Started
+Prerequisites
+- Flutter
+- Firebase account with a configured project
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Clone the repository:
+git clone https://github.com/mahbub-hasan-talukdar/chat_app.git
